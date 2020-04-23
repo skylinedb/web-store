@@ -4,6 +4,9 @@ target/
 !**/src/main/**
 !**/src/test/**
 
+### Angular ###
+/src/main/resources/public/
+
 ### STS ###
 .apt_generated
 .classpath
