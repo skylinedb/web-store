@@ -1,0 +1,50 @@
+import {Component, OnInit} from '@angular/core';
+import {User} from '../models/user';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {AppComponent} from '../app.component';
+import {Order} from '../models/order';
+import {Product} from '../models/product';
+
+export interface Product {
+    product_name: string
+    product_price: string
+    id?: number
+}
+
+@Component({
+    selector: 'app-orders',
+    templateUrl: './orders.component.html',
+    styleUrls: ['./orders.component.scss']
+})
+export class OrdersComponent implements OnInit {
+
+    loading = false;
+    orders: Order[] = [];
+    products: Product [] = [];
+
+    constructor(private http: HttpClient) {
+    }
+
+    ngOnInit() {
+        this.getOrder();
+
+    }
+
+    getOrder() {
+        new Date().getTimezoneOffset();
+        let key = sessionStorage.getItem('token');
+        this.http.get<Order[]>('http://localhost:8080/test/FindOrderByUserId', {params: new HttpParams().set('id', key)})
+            .subscribe(orders => {
+                orders.sort((a, b) => <any> new Date(b.timestamp) - <any> new Date(a.timestamp));
+                this.orders = orders;
+            });
+    }
+
+    deleteOrder(i: number) {
+        let deleteOrder = this.orders[i];
+        this.http.post<User>('http://localhost:8080/test/deleteOrder', deleteOrder)
+            .subscribe(delOrder => {
+                this.orders.splice(i, 1);
+            });
+    }
+}

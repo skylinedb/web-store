@@ -1,0 +1,13 @@
+<div *ngIf="!loading; else loadingBlock">
+    <div *ngIf="products.length; else noTodos">
+        <div class="card" *ngFor="let products of products, let j=index">{{j + 1}}
+            . {{products.product_name}} Цена:{{products.product_price}}Руб.</div>
+    </div>
+    <ng-template #noTodos>
+        <p>Нет элементов</p>
+    </ng-template>
+</div>
+
+<ng-template #loadingBlock>
+    <p>Загрузка...</p>
+</ng-template>

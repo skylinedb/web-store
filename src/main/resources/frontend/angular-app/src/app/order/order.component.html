@@ -1,0 +1,42 @@
+<form>
+    <h2>Создание заказа</h2>
+
+    <div class="form-group">
+        <label for="RegistrationFormControlInputEmail">Email</label>
+        <input type="email" class="form-control" id="RegistrationFormControlInputEmail"
+               placeholder="example@example.com" [(ngModel)]="email" [ngModelOptions]="{standalone: true}"  disabled>
+    </div>
+    <div class="form-group">
+        <label for="OrderFormControlAdress">Address</label>
+        <input type="text" class="form-control" id="OrderFormControlAdress" placeholder="Address" [(ngModel)]="address"
+               [ngModelOptions]="{standalone: true}">
+    </div>
+    <button type="button" class="btn" (click)="createOrder()">Создать заказ</button>
+</form>
+
+<h3>Выбранные товары</h3>
+<div class="card" *ngFor="let chooseProducts of orderProducts; let i = index">
+    <p>
+        <!--        <td></td>-->
+        <span>{{i + 1}}. {{chooseProducts.product_name}} {{chooseProducts.product_price}}</span>
+        <span>
+            <button class="btn btn-danger" (click)="deleteFromOrder(i)">Удалить</button>
+            <!--                        <button class="btn" >Завершить</button>-->
+          </span>
+    </p>
+</div>
+
+<br>
+<br>
+<h3>Все товары</h3>
+
+<div class="card" *ngFor="let products of allProducts; let i = index">
+    <p>
+        <!--        <td></td>-->
+        <span>{{i + 1}}. {{products.product_name}} Цена:{{products.product_price}} Руб.</span>
+        <span>
+            <button class="btn btn-danger" (click)="addToOrder(i)">Добавить</button>
+            <!--                        <button class="btn" >Завершить</button>-->
+          </span>
+    </p>
+</div>

@@ -1,0 +1,26 @@
+<div *ngIf="!loading; else loadingBlock">
+    <div *ngIf="orders.length; else noTodos">
+        <div class="card" *ngFor="let ordersinline of orders, let i=index">
+            <span>Заказ номер {{i + 1}}: Пользователь {{ordersinline.user.last_name}} {{ordersinline.user.first_name}}
+                от {{ordersinline.timestamp| date : 'yyyy-MM-dd HH:mm:ss':'+0600'}}
+                <br>
+            Заказал:
+            <div class="card" *ngFor="let products of ordersinline.products, let j=index">{{j + 1}}
+                . {{products.product_name}} Цена:{{products.product_price}}Руб.</div>
+            По адресу: {{ordersinline.address}}
+
+
+                <br>
+                <br>
+                 <button class="btn btn-danger" (click)="deleteOrder(i)">Удалить</button>
+            </span>
+        </div>
+    </div>
+    <ng-template #noTodos>
+        <p>Нет элементов</p>
+    </ng-template>
+</div>
+
+<ng-template #loadingBlock>
+    <p>Загрузка...</p>
+</ng-template>
