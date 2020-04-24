@@ -12,6 +12,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "ORDERS")
@@ -23,13 +26,23 @@ public class Order {
     private int id;
 
     @Column(name = "ADDRESS")
+    @Size(min = 5, message = "Адрес должен быть больше 5 символов")
+    @Size(max = 100, message = "Адрес не может быть больше 100 символов")
     private String address;
 
     @Column(name = "USER_ID", updatable = false, insertable = false)
+    @Positive
     private int userId;
 
     @Column(name = "TIMESTAMP")
+    @PastOrPresent
     private java.time.LocalDateTime timestamp;
+
+    @Column(name = "SUMM")
+    private double summ;
+
+    @Column(name = "SUMM_DISCOUNT")
+    private double summ_discount;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "USER_ID", nullable = false)
@@ -72,6 +85,22 @@ public class Order {
 
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public double getSumm() {
+        return summ;
+    }
+
+    public void setSumm(double summ) {
+        this.summ = summ;
+    }
+
+    public double getSumm_discount() {
+        return summ_discount;
+    }
+
+    public void setSumm_discount(double summ_discount) {
+        this.summ_discount = summ_discount;
     }
 
     public User getUser() {

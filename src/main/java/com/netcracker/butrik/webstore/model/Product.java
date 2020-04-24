@@ -10,6 +10,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
 
 @Entity
 @Table(name = "PRODUCTS")
@@ -21,10 +26,13 @@ public class Product {
     private int id;
 
     @Column(name = "PRODUCT_NAME")
+    @NotBlank(message = "Необходимо указать название товара")
     private String product_name;
 
     @Column(name = "PRODUCT_PRICE")
-    private int product_price;
+    @Positive(message = "Цена не может быть отрицательной")
+    @Max(value = 999999999, message = "Цена слишком высокая")
+    private double product_price;
 
     @ManyToMany
     @JoinTable(name = "ORDERS_PRODUCTS",
@@ -49,7 +57,7 @@ public class Product {
         this.product_name = product_name;
     }
 
-    public int getProduct_price() {
+    public double getProduct_price() {
         return product_price;
     }
 

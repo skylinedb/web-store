@@ -5,6 +5,7 @@ import com.netcracker.butrik.webstore.model.User;
 import com.netcracker.butrik.webstore.repository.ProductJpaRepository;
 import java.util.List;
 import java.util.Optional;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +32,7 @@ public class ProductController {
     }
 
     @PostMapping(value = "/load")
-    public Optional<Product> loadUser(@RequestBody Product product) {
+    public Optional<Product> loadUser(@RequestBody@Valid Product product) {
         productJpaRepository.save(product);
         return productJpaRepository.findById(product.getId());
     }
