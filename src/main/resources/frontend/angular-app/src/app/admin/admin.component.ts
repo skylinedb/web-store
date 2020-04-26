@@ -4,7 +4,7 @@ import {Order} from '../models/order';
 import {User} from '../models/user';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Md5} from 'ts-md5/dist/md5';
-import construct = Reflect.construct;
+import {error} from "util";
 
 @Component({
     selector: 'app-admin',
@@ -32,14 +32,16 @@ export class AdminComponent implements OnInit {
     }
 
     fetchUsers() {
-        this.http.get<User[]>('http://localhost:8080/test/giveMeAllUsers')
+        // this.http.get<User[]>('http://localhost:8080/test/giveMeAllUsers')
+        this.http.get<User[]>('http://localhost:8080/api/user/findAll')
             .subscribe(users => {
                 this.allUsers = users;
             });
     }
 
     fetchProducts() {
-        this.http.get<Product[]>('http://localhost:8080/test/giveMeAllProducts')
+      // this.http.get<Product[]>('http://localhost:8080/test/giveMeAllProducts')
+        this.http.get<Product[]>('http://localhost:8080/api/product/findAll')
             .subscribe(products => {
                 this.allProducts = products;
             });
@@ -47,7 +49,8 @@ export class AdminComponent implements OnInit {
 
     fetchOrders() {
         new Date().getTimezoneOffset();
-        this.http.get<Order[]>('http://localhost:8080/test//giveMeAllOrders')
+      // this.http.get<Order[]>('http://localhost:8080/test//giveMeAllOrders')
+        this.http.get<Order[]>('http://localhost:8080/api/order/findAll')
             .subscribe(orders => {
                 orders.sort((a, b) => <any> new Date(b.timestamp) - <any> new Date(a.timestamp));
                 this.allOrders = orders;
@@ -56,7 +59,8 @@ export class AdminComponent implements OnInit {
 
     deleteProduct(i: number) {
         let deleteProduct = this.allProducts[i];
-        this.http.post<Product>('http://localhost:8080/test/deleteProduct', deleteProduct)
+        // this.http.post<Product>('http://localhost:8080/test/deleteProduct', deleteProduct)
+        this.http.post<Product>('http://localhost:8080/api/product/delete', deleteProduct)
             .subscribe(delProduct => {
                 this.allProducts.splice(i, 1);
             });
@@ -64,7 +68,8 @@ export class AdminComponent implements OnInit {
 
     deleteOrder(i: number) {
         let deleteOrder = this.allOrders[i];
-        this.http.post<Order>('http://localhost:8080/test/deleteOrder', deleteOrder)
+        // this.http.post<Order>('http://localhost:8080/test/deleteOrder', deleteOrder)
+        this.http.post<Order>('http://localhost:8080/api/order/delete', deleteOrder)
             .subscribe(delOrder => {
                 this.allOrders.splice(i, 1);
             });
@@ -72,7 +77,8 @@ export class AdminComponent implements OnInit {
 
     deleteUser(i: number) {
         let deleteUser = this.allUsers[i];
-        this.http.post<User>('http://localhost:8080/test/deleteUser', deleteUser)
+        // this.http.post<User>('http://localhost:8080/test/deleteUser', deleteUser)
+        this.http.post<User>('http://localhost:8080/api/user/delete', deleteUser)
             .subscribe(delUser => {
                 this.allUsers.splice(i, 1);
             });
@@ -82,7 +88,8 @@ export class AdminComponent implements OnInit {
         let resetPasswordUser = this.allUsers[i];
         let newPassword: any = Md5.hashStr(this.newResetPass);
         resetPasswordUser.pass = newPassword;
-        this.http.post<User>('http://localhost:8080/test/updateUser', resetPasswordUser)
+        // this.http.post<User>('http://localhost:8080/test/updateUser', resetPasswordUser)
+        this.http.post<User>('http://localhost:8080/api/user/update', resetPasswordUser)
             .subscribe(delUser => {
                 console.log(resetPasswordUser);
             });
@@ -100,7 +107,8 @@ export class AdminComponent implements OnInit {
             product_price: this.priceOfProduct,
         };
 
-        this.http.post<User>('http://localhost:8080/test/saveProduct', newProduct)
+        // this.http.post<User>('http://localhost:8080/test/saveProduct', newProduct)
+        this.http.post<User>('http://localhost:8080/api/product/load', newProduct)
             .subscribe(user => {
                 console.log('Product', newProduct);
                 this.nameOfProduct = '';

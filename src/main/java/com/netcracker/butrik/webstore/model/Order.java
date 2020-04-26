@@ -44,6 +44,9 @@ public class Order {
     @Column(name = "SUMM_DISCOUNT")
     private double summ_discount;
 
+    @Column(name = "DISCOUNT_PERCENT")
+    private int discount_percent;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
@@ -101,6 +104,14 @@ public class Order {
 
     public void setSumm_discount(double summ_discount) {
         this.summ_discount = summ_discount;
+    }
+
+    public int getDiscount_percent() {
+        return discount_percent;
+    }
+
+    public void setDiscount_percent(int discount_percent) {
+        this.discount_percent = discount_percent;
     }
 
     public User getUser() {

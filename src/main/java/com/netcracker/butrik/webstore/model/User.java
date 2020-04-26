@@ -40,9 +40,9 @@ public class User {
     @NotBlank(message = "Необходимо указать пароль")
     private String pass;
 
-    @Column(name = "ADMIN_TOOGLE")
+    @Column(name = "ADMIN_TOGGLE")
     @NotBlank
-    private boolean admin_toogle;
+    private boolean admin_toggle;
 
     @OneToOne
     @JoinColumn(name = "DISCOUNT_ID")
@@ -111,12 +111,12 @@ public class User {
         this.discount_id = discount_id;
     }
 
-    public boolean isAdmin_toogle() {
-        return admin_toogle;
+    public boolean isAdmin_toggle() {
+        return admin_toggle;
     }
 
-    public void setAdmin_toogle(boolean admin_toogle) {
-        this.admin_toogle = admin_toogle;
+    public void setAdmin_toggle(boolean admin_toogle) {
+        this.admin_toggle = admin_toogle;
     }
 
     //    public List<Order> getOrders() {

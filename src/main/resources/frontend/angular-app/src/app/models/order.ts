@@ -9,7 +9,9 @@ export class Order {
         public user?: User,
         public id?: number,
         public products?: Array<Product>,
-        public timestamp?: Date
+        public timestamp?: Date,
+        public summ?: number,
+        public summ_discount?: number
     ) {
     }
 }

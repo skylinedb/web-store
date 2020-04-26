@@ -77,7 +77,6 @@ export class OrderComponent implements OnInit {
                 this.address = '';
                 this.router.navigateByUrl('orders');
             });
-
     }
 
     deleteFromOrder(i: number) {
