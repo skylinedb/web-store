@@ -1,0 +1,23 @@
+
+
+<form>
+
+    <h2>Регистрация нового пользователя</h2>
+    <div>
+    <div class="form-group">
+<!--        <label for="RegistrationFormControlInputFirstName">Имя</label>-->
+        <input type="text"  placeholder="Имя" [(ngModel)]="firstname" [ngModelOptions]="{standalone: true}">
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" id="RegistrationFormControlInputLastName" placeholder="Фамилия" [(ngModel)]="lastname" [ngModelOptions]="{standalone: true}">
+    </div>
+    <div class="form-group">
+        <input type="email" class="form-control" id="RegistrationFormControlInputEmail" placeholder="example@example.com" [(ngModel)]="email" [ngModelOptions]="{standalone: true}">
+    </div>
+    <div class="form-group">
+        <input type="password" class="form-control" id="RegistrationFormControlInputPass" placeholder="Password" [(ngModel)]="pass" [ngModelOptions]="{standalone: true}">
+    </div>
+    <button type="button" class="btn" (click)="saveUser()">Зарегистрироваться</button>
+    </div>
+    <label>{{testCredentials}}</label>
+</form>

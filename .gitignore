@@ -4,6 +4,12 @@ target/
 !**/src/main/**
 !**/src/test/**
 
+### Logging ###
+/logs/**
+
+### Angular ###
+/src/main/resources/public/
+
 ### STS ###
 .apt_generated
 .classpath
