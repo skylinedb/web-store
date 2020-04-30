@@ -8,7 +8,6 @@ import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,40 +23,43 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @Autowired
-    private UserJpaRepository userJpaRepository;
-    @Autowired
     private UserService userService;
 
     @GetMapping(value = "/findAll")
     public List<User> findAll() {
-        return userJpaRepository.findAll();
+        return userService.findAll();
     }
 
     @GetMapping(value = "/findById")
     public User findById(@RequestParam int id) {
-        return userJpaRepository.findById(id);
+        return userService.findById(id);
+    }
+
+    @GetMapping(value = "/findByEmail")
+    public User findByEmail(@RequestParam String email) {
+        return userService.findByEmail(email);
     }
 
     @GetMapping(value = "/{email}")
     public User findByEmailPath(@PathVariable String email) {
-        return userJpaRepository.findByEmail(email);
+        return userService.findByEmail(email);
     }
 
-    @PostMapping(value = "/load")
+    @PostMapping(value = "/save")
     public User loadUser(@RequestBody @Valid User user) {
 //        userJpaRepository.save(user);
-        userService.saveUser(user);
-        return userJpaRepository.findById(user.getId());
+        userService.save(user);
+        return userService.findById(user.getId());
     }
 
-    @PutMapping(value = "/update")
+    @PostMapping(value = "/update")
     public User updateUser(@RequestBody @Valid User user) {
-        userJpaRepository.save(user);
-        return userJpaRepository.findById(user.getId());
+        userService.update(user);
+        return userService.findById(user.getId());
     }
 
     @PostMapping(value = "/delete")
     public void deleteUser(@RequestBody User user) {
-        userJpaRepository.delete(user);
+        userService.delete(user);
     }
 }

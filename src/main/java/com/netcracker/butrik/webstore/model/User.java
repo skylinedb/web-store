@@ -48,7 +48,7 @@ public class User {
     @JoinColumn(name = "DISCOUNT_ID")
     private Discount discount_id;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Order> orders;
 
 //    public User(int id, @NotBlank(message = "Необходимо указать Имя") String first_name

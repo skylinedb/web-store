@@ -48,7 +48,7 @@ export class RegistrationComponent implements OnInit {
         } else if (this.pass == '') {
             this.testCredentials = 'Введите пароль!';
         } else {
-            this.http.post<User>('http://localhost:8080/test/saveUser', newUser)
+            this.http.post<User>('http://localhost:8080/api/user/save', newUser)
                 .subscribe(user => {
                     console.log('User', newUser);
                     this.firstname = '';

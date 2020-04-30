@@ -32,15 +32,15 @@ export class LoginComponent implements OnInit {
     }
 
     loginUser() {
-        this.http.get<User[]>('http://localhost:8080/test/getUserByEmail', {params: new HttpParams().set('email', this.email)})
+        this.http.get<User>('http://localhost:8080/api/user/findByEmail', {params: new HttpParams().set('email', this.email)})
             .subscribe(user => {
-                if (user[0] != null) {
-                    if (Md5.hashStr(this.pass) == user[0].pass) {
+                if (user != null) {
+                    if (Md5.hashStr(this.pass) == user.pass) {
                         this.authSuccess = true;
-                        if (user[0].id == 101) {
+                        if (user.admin_toogle == true) {
                             this.authAdmin.login();
                         }
-                        sessionStorage.setItem('token', user[0].id.toString());
+                        sessionStorage.setItem('token', user.id.toString());
                         sessionStorage.getItem('token');
                         this.auth.login();
                         this.testCredentials = 'Успешно';
