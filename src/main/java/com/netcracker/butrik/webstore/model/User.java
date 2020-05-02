@@ -41,8 +41,11 @@ public class User {
     private String pass;
 
     @Column(name = "ADMIN_TOGGLE")
-    @NotBlank
+//    @NotBlank
     private boolean admin_toggle;
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Contact> contacts;
 
     @OneToOne
     @JoinColumn(name = "DISCOUNT_ID")
@@ -117,6 +120,14 @@ public class User {
 
     public void setAdmin_toggle(boolean admin_toogle) {
         this.admin_toggle = admin_toogle;
+    }
+
+    public List<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
     }
 
     //    public List<Order> getOrders() {

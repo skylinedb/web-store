@@ -53,4 +53,9 @@ public class OrderController {
     public void deleteOrder(@RequestBody Order order) {
         orderService.delete(order);
     }
+
+    @GetMapping(value = "/test")
+    public double getSummUserId(@RequestParam int userId) {
+        return orderService.testForDiscountByUserId(userId);
+    }
 }
