@@ -1,5 +1,7 @@
 package com.netcracker.butrik.webstore.controller;
 
+import com.netcracker.butrik.webstore.dto.OrderDto;
+import com.netcracker.butrik.webstore.dto.mapper.impl.OrderMapperImpl;
 import com.netcracker.butrik.webstore.model.Order;
 import com.netcracker.butrik.webstore.service.OrderService;
 import java.util.List;
@@ -21,20 +23,37 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private OrderMapperImpl orderMapper;
 
     @GetMapping(value = "/findAll")
-    public List<Order> findAll() {
-        return orderService.findAll();
+    public List<OrderDto> findAll() {
+        List<Order> orderList = orderService.findAll();
+        return orderMapper.toDtos(orderList);
+    }
+
+    @GetMapping(value = "/findAll/user")
+    public List<OrderDto> findAllwithUser() {
+        List<Order> orderList = orderService.findAll();
+        return orderMapper.toDtosWithUser(orderList);
     }
 
     @GetMapping(value = "/findById")
-    public Order findById(@RequestParam int id) {
-        return orderService.findById(id);
+    public OrderDto findById(@RequestParam int id) {
+        Order order = orderService.findById(id);
+        return orderMapper.toDto(order);
     }
 
     @GetMapping(value = "/findByUserId")
-    public List<Order> findByOrderId(@RequestParam int id) {
-        return orderService.findByUserId(id);
+    public List<OrderDto> findByOrderId(@RequestParam int id) {
+        List<Order> orderList = orderService.findByUserId(id);
+        return orderMapper.toDtos(orderList);
+    }
+
+    @GetMapping(value = "/findByUserId/user")
+    public List<OrderDto> findByOrderIdWithUser(@RequestParam int id) {
+        List<Order> orderList = orderService.findByUserId(id);
+        return orderMapper.toDtosWithUser(orderList);
     }
 
     @PostMapping(value = "/save")

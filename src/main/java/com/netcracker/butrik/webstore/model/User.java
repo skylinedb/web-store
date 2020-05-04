@@ -44,7 +44,7 @@ public class User {
 //    @NotBlank
     private boolean admin_toggle;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Contact> contacts;
 
     @OneToOne
@@ -88,7 +88,9 @@ public class User {
         return last_name;
     }
 
-    public void setLast_name(String last_name) { this.last_name = last_name; }
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
 
     public String getEmail() {
         return email;
@@ -130,11 +132,11 @@ public class User {
         this.contacts = contacts;
     }
 
-    //    public List<Order> getOrders() {
-//        return orders;
-//    }
-//
-//    public void setOrders(List<Order> orders) {
-//        this.orders = orders;
-//    }
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
 }

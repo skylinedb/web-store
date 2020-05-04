@@ -1,8 +1,9 @@
 package com.netcracker.butrik.webstore.controller;
 
 
+import com.netcracker.butrik.webstore.dto.UserDto;
+import com.netcracker.butrik.webstore.dto.mapper.impl.UserMapperImpl;
 import com.netcracker.butrik.webstore.model.User;
-import com.netcracker.butrik.webstore.repository.UserJpaRepository;
 import com.netcracker.butrik.webstore.service.UserService;
 import java.util.List;
 import javax.validation.Valid;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,15 +24,31 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserMapperImpl userMapper;
 
     @GetMapping(value = "/findAll")
-    public List<User> findAll() {
-        return userService.findAll();
+    public List<UserDto> findAll() {
+        List<User>users =userService.findAll();
+        return userMapper.toDtos(users);
+    }
+
+    @GetMapping(value = "/findAll/orders")
+    public List<UserDto> findAllWithOrders() {
+        List<User>users =userService.findAll();
+        return userMapper.toDtosWithOrders(users);
     }
 
     @GetMapping(value = "/findById")
-    public User findById(@RequestParam int id) {
-        return userService.findById(id);
+    public UserDto findById(@RequestParam int id) {
+        User user = userService.findById(id);
+        return userMapper.toDto(user);
+    }
+
+    @GetMapping(value = "/findById/orders")
+    public UserDto findByIdWithoutOrders(@RequestParam int id) {
+        User user = userService.findById(id);
+        return userMapper.toDtoWithOrders(user);
     }
 
     @GetMapping(value = "/findByEmail")
@@ -47,7 +63,6 @@ public class UserController {
 
     @PostMapping(value = "/save")
     public User loadUser(@RequestBody @Valid User user) {
-//        userJpaRepository.save(user);
         userService.save(user);
         return userService.findById(user.getId());
     }
