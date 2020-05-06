@@ -1,5 +1,6 @@
 package com.netcracker.butrik.webstore.controller;
 
+import com.netcracker.butrik.webstore.dto.ContactDto;
 import com.netcracker.butrik.webstore.model.Contact;
 import com.netcracker.butrik.webstore.service.ContactService;
 import java.util.List;
@@ -24,34 +25,34 @@ public class ContactController {
 
 
     @GetMapping(value = "/findAll")
-    public List<Contact> findAll() {
+    public List<ContactDto> findAll() {
         return contactService.findAll();
     }
 
     @GetMapping(value = "/findById")
-    public Contact findById(@RequestParam int id) {
+    public ContactDto findById(@RequestParam int id) {
         return contactService.findById(id);
     }
 
     @GetMapping(value = "/findByUserId")
-    public List<Contact> findByContactId(@RequestParam int id) {
+    public List<ContactDto> findByContactId(@RequestParam int id) {
         return contactService.findByUserId(id);
     }
 
     @PostMapping(value = "/save")
-    public Contact loadContact(@RequestBody @Valid Contact contact) {
-        contactService.save(contact);
-        return contactService.findById(contact.getId());
+    public ContactDto loadContact(@RequestBody @Valid ContactDto contactDto) {
+        contactService.save(contactDto);
+        return contactService.findById(contactDto.getId());
     }
 
     @PutMapping(value = "/update")
-    public Contact updateContact(@RequestBody @Valid Contact contact) {
-        contactService.update(contact);
-        return contactService.findById(contact.getId());
+    public ContactDto updateContact(@RequestBody @Valid ContactDto contactDto) {
+        contactService.update(contactDto);
+        return contactService.findById(contactDto.getId());
     }
 
     @PostMapping(value = "/delete")
-    public void deleteContact(@RequestBody Contact contact) {
-        contactService.delete(contact);
+    public void deleteContact(@RequestBody ContactDto contactDto) {
+        contactService.delete(contactDto);
     }
 }

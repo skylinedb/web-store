@@ -14,6 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "USERS")
@@ -26,10 +27,14 @@ public class User {
 
     @Column(name = "FIRST_NAME")
     @NotBlank(message = "Необходимо указать Имя")
+    @Size(min = 2, message = "Имя не может быть меньше 2-х символов")
+    @Size(max = 30, message = "Имя не может быть больше 30 символов")
     private String first_name;
 
     @Column(name = "LAST_NAME")
     @NotBlank(message = "Необходимо указать Фамилию")
+    @Size(min = 2, message = "Фамилия не может быть меньше 2-х символов")
+    @Size(max = 30, message = "Фамилия не может быть больше 30 символов")
     private String last_name;
 
     @Column(name = "EMAIL")

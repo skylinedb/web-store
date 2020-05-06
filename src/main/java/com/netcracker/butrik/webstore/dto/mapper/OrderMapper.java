@@ -13,7 +13,9 @@ public interface OrderMapper {
     OrderDto toDto(Order order);
 
     @InheritInverseConfiguration
-    Order toModel(OrderDto orderDto);
+    Order fromDto(OrderDto orderDto);
 
     List<OrderDto> toDtos(List<Order> orders);
+
+    List<Order> fromDtos(List<OrderDto> orderDtos);
 }

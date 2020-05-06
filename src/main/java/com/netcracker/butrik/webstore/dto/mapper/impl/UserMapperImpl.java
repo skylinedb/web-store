@@ -119,7 +119,7 @@ public class UserMapperImpl implements UserMapper {
 
         List<Order> list1 = new ArrayList<Order>(list.size());
         for (OrderDto orderDto : list) {
-            list1.add(orderMapper.toModel(orderDto));
+            list1.add(orderMapper.fromDto(orderDto));
         }
 
         return list1;

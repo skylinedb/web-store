@@ -4,17 +4,18 @@ public class ContactDto {
 
     private int id;
 
-//    private UserDto user;
+//    private ContactTypeDto contactType;
 
-    private ContactTypeDto contactType;
+    private String type_label;
 
     private String value;
 
-    public ContactDto(int id, ContactTypeDto contactType, String value) {
-        this.id = id;
-//        this.user = user;
-        this.contactType = contactType;
+    private int userId;
+
+    public ContactDto(String type_label, String value, int userId) {
+        this.type_label = type_label;
         this.value = value;
+        this.userId = userId;
     }
 
     public ContactDto() {
@@ -28,21 +29,13 @@ public class ContactDto {
         this.id = id;
     }
 
-//    public UserDto getUser() {
-//        return user;
+//    public ContactTypeDto getContactType() {
+//        return contactType;
 //    }
 //
-//    public void setUser(UserDto user) {
-//        this.user = user;
+//    public void setContactType(ContactTypeDto contactType) {
+//        this.contactType = contactType;
 //    }
-
-    public ContactTypeDto getContactType() {
-        return contactType;
-    }
-
-    public void setContactType(ContactTypeDto contactType) {
-        this.contactType = contactType;
-    }
 
     public String getValue() {
         return value;
@@ -50,5 +43,21 @@ public class ContactDto {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getType_label() {
+        return type_label;
+    }
+
+    public void setType_label(String type_label) {
+        this.type_label = type_label;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

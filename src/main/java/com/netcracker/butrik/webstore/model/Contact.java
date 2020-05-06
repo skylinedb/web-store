@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Positive;
 
 @Entity
 @Table(name = "CONTACTS")
@@ -21,17 +22,19 @@ public class Contact {
     @Column(name = "ID")
     private int id;
 
-//    @Column(name = "USER_ID")
-//    private int user_id;
+    @Column(name = "USER_ID", updatable = false, insertable = false)
+    @Positive
+    private int user_id;
 
     @OneToOne
-    @JoinColumn(name = "TYPE_ID")
+    @JoinColumn(name = "TYPE_ID", nullable = false)
     private ContactType contactType;
 
     @Column(name = "VALUE")
     private String value;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
+    @ManyToOne(optional = false)
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
@@ -58,5 +61,21 @@ public class Contact {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 }

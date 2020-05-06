@@ -1,8 +1,12 @@
 package com.netcracker.butrik.webstore.dto.mapper.impl;
 
 import com.netcracker.butrik.webstore.dto.ProductDto;
+import com.netcracker.butrik.webstore.dto.UserDto;
 import com.netcracker.butrik.webstore.dto.mapper.ProductMapper;
 import com.netcracker.butrik.webstore.model.Product;
+import com.netcracker.butrik.webstore.model.User;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.Generated;
 import org.springframework.stereotype.Component;
 
@@ -42,5 +46,19 @@ public class ProductMapperImpl implements ProductMapper {
         product.setProduct_price( (int) productDto.getProduct_price() );
 
         return product;
+    }
+
+    @Override
+    public List<ProductDto> toDtos(List<Product> products) {
+        if (products == null) {
+            return null;
+        }
+
+        List<ProductDto> list = new ArrayList<ProductDto>(products.size());
+        for (Product product : products) {
+            list.add(toDto(product));
+        }
+
+        return list;
     }
 }

@@ -1,5 +1,7 @@
 package com.netcracker.butrik.webstore.service;
 
+import com.netcracker.butrik.webstore.dto.ProductDto;
+import com.netcracker.butrik.webstore.dto.mapper.impl.ProductMapperImpl;
 import com.netcracker.butrik.webstore.model.Product;
 import com.netcracker.butrik.webstore.repository.ProductJpaRepository;
 import java.util.List;
@@ -13,10 +15,13 @@ public class ProductService {
 
     @Autowired
     ProductJpaRepository productJpaRepository;
+    @Autowired
+    ProductMapperImpl productMapper;
 
     private static Logger log = LoggerFactory.getLogger(ProductService.class);
 
-    public void save(final Product product) {
+    public void save(final ProductDto productDto) {
+        Product product = productMapper.fromDto(productDto);
         productJpaRepository.save(product);
         log.info("Product: ID:"
             +product.getId()
@@ -25,7 +30,8 @@ public class ProductService {
             +"  SAVE OPERATION");
     }
 
-    public void update(final Product product) {
+    public void update(final ProductDto productDto) {
+        Product product = productMapper.fromDto(productDto);
         productJpaRepository.save(product);
         log.info("Product: ID:"
             +product.getId()
@@ -34,7 +40,8 @@ public class ProductService {
             +"  UPDATE OPERATION");
     }
 
-    public void delete(final Product product) {
+    public void delete(final ProductDto productDto) {
+        Product product = productMapper.fromDto(productDto);
         productJpaRepository.delete(product);
         log.info("Product: ID:"
             +product.getId()
@@ -43,14 +50,17 @@ public class ProductService {
             +"  DELETE OPERATION");
     }
 
-    public Product findById(final int id) {
+    public ProductDto findById(final int id) {
         log.info("Product: ID:" + id + "  FindByID OPERATION");
-        return productJpaRepository.findById(id);
+        Product product = productJpaRepository.findById(id);
+        return productMapper.toDto(product);
     }
 
 
-    public List<Product> findAll() {
+    public List<ProductDto> findAll() {
         log.info("Product: FindAll OPERATION");
-        return productJpaRepository.findAll();
+        List<Product> products = productJpaRepository.findAll();
+        return productMapper.toDtos(products);
     }
+
 }

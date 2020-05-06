@@ -4,15 +4,13 @@ import com.netcracker.butrik.webstore.dto.OrderDto;
 import com.netcracker.butrik.webstore.dto.ProductDto;
 import com.netcracker.butrik.webstore.dto.UserDto;
 import com.netcracker.butrik.webstore.dto.mapper.OrderMapper;
-import com.netcracker.butrik.webstore.dto.mapper.ProductMapper;
 import com.netcracker.butrik.webstore.model.Order;
 import com.netcracker.butrik.webstore.model.Product;
 import com.netcracker.butrik.webstore.model.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
-import javax.xml.ws.soap.Addressing;
-import org.mapstruct.factory.Mappers;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -69,7 +67,7 @@ public class OrderMapperImpl implements OrderMapper {
     }
 
     @Override
-    public Order toModel(OrderDto orderDto) {
+    public Order fromDto(OrderDto orderDto) {
         if ( orderDto == null ) {
             return null;
         }
@@ -100,6 +98,19 @@ public class OrderMapperImpl implements OrderMapper {
             list.add( toDto( order ) );
         }
 
+        return list;
+    }
+
+    @Override
+    public List<Order> fromDtos(List<OrderDto> orderDtos) {
+        if (orderDtos == null) {
+            return null;
+        }
+
+        List<Order> list = new ArrayList<Order>(orderDtos.size());
+        for (OrderDto orderDto : orderDtos) {
+            list.add(fromDto(orderDto));
+        }
         return list;
     }
 
@@ -155,7 +166,7 @@ public class OrderMapperImpl implements OrderMapper {
 
         List<Order> list1 = new ArrayList<Order>( list.size() );
         for ( OrderDto orderDto : list ) {
-            list1.add( toModel( orderDto ) );
+            list1.add( fromDto( orderDto ) );
         }
 
         return list1;

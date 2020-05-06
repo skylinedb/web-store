@@ -1,8 +1,6 @@
 package com.netcracker.butrik.webstore.dto.mapper.impl;
 
 import com.netcracker.butrik.webstore.dto.ContactDto;
-import com.netcracker.butrik.webstore.dto.ContactTypeDto;
-import com.netcracker.butrik.webstore.dto.UserDto;
 import com.netcracker.butrik.webstore.dto.mapper.ContactMapper;
 import com.netcracker.butrik.webstore.model.Contact;
 import com.netcracker.butrik.webstore.model.ContactType;
@@ -28,8 +26,9 @@ public class ContactMapperImpl implements ContactMapper {
 
         ContactDto contactDto = new ContactDto();
 
+        contactDto.setUserId( contact.getUser_id() );
+        contactDto.setType_label( contactContactTypeType( contact ) );
         contactDto.setId( contact.getId() );
-        contactDto.setContactType( contactTypeToContactTypeDto( contact.getContactType() ) );
         contactDto.setValue( contact.getValue() );
 
         return contactDto;
@@ -43,8 +42,10 @@ public class ContactMapperImpl implements ContactMapper {
 
         Contact contact = new Contact();
 
+        contact.setContactType( contactDtoToContactType( contactDto ) );
+        contact.setUser_id( contactDto.getUserId() );
+        contact.setUser(userToFromDto(contactDto.getUserId()));
         contact.setId( contactDto.getId() );
-        contact.setContactType( contactTypeDtoToContactType( contactDto.getContactType() ) );
         contact.setValue( contactDto.getValue() );
 
         return contact;
@@ -64,29 +65,36 @@ public class ContactMapperImpl implements ContactMapper {
         return list;
     }
 
-    protected ContactTypeDto contactTypeToContactTypeDto(ContactType contactType) {
+    private String contactContactTypeType(Contact contact) {
+        if ( contact == null ) {
+            return null;
+        }
+        ContactType contactType = contact.getContactType();
         if ( contactType == null ) {
             return null;
         }
-
-        ContactTypeDto contactTypeDto = new ContactTypeDto();
-
-        contactTypeDto.setId( contactType.getId() );
-        contactTypeDto.setType( contactType.getType() );
-
-        return contactTypeDto;
+        String type = contactType.getType();
+        if ( type == null ) {
+            return null;
+        }
+        return type;
     }
 
-    protected ContactType contactTypeDtoToContactType(ContactTypeDto contactTypeDto) {
-        if ( contactTypeDto == null ) {
+    protected ContactType contactDtoToContactType(ContactDto contactDto) {
+        if ( contactDto == null ) {
             return null;
         }
 
         ContactType contactType = new ContactType();
 
-        contactType.setId( contactTypeDto.getId() );
-        contactType.setType( contactTypeDto.getType() );
+        contactType.setType( contactDto.getType_label() );
 
         return contactType;
+    }
+
+    protected User userToFromDto(int id) {
+        User user = new User();
+        user.setId(id);
+        return user;
     }
 }

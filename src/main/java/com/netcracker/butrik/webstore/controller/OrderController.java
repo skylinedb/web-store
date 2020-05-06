@@ -1,8 +1,6 @@
 package com.netcracker.butrik.webstore.controller;
 
 import com.netcracker.butrik.webstore.dto.OrderDto;
-import com.netcracker.butrik.webstore.dto.mapper.impl.OrderMapperImpl;
-import com.netcracker.butrik.webstore.model.Order;
 import com.netcracker.butrik.webstore.service.OrderService;
 import java.util.List;
 import javax.validation.Valid;
@@ -23,54 +21,52 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private OrderMapperImpl orderMapper;
 
     @GetMapping(value = "/findAll")
     public List<OrderDto> findAll() {
-        List<Order> orderList = orderService.findAll();
-        return orderMapper.toDtos(orderList);
+        return orderService.findAll();
     }
 
     @GetMapping(value = "/findAll/user")
-    public List<OrderDto> findAllwithUser() {
-        List<Order> orderList = orderService.findAll();
-        return orderMapper.toDtosWithUser(orderList);
+    public List<OrderDto> findAll_withUser() {
+        return orderService.findAll_withUser();
     }
 
     @GetMapping(value = "/findById")
     public OrderDto findById(@RequestParam int id) {
-        Order order = orderService.findById(id);
-        return orderMapper.toDto(order);
+        return orderService.findById_withUser(id);
     }
 
-    @GetMapping(value = "/findByUserId")
-    public List<OrderDto> findByOrderId(@RequestParam int id) {
-        List<Order> orderList = orderService.findByUserId(id);
-        return orderMapper.toDtos(orderList);
+    @GetMapping(value = "/findById/user")
+    public OrderDto findById_withUser(@RequestParam int id) {
+        return orderService.findById(id);
     }
+
+//    @GetMapping(value = "/findByUserId")
+//    public List<OrderDto> findByOrderId(@RequestParam int id) {
+//        return orderService.findByUserId(id);
+//    }
 
     @GetMapping(value = "/findByUserId/user")
-    public List<OrderDto> findByOrderIdWithUser(@RequestParam int id) {
-        List<Order> orderList = orderService.findByUserId(id);
-        return orderMapper.toDtosWithUser(orderList);
+    public List<OrderDto> findByOrderId_withUser(@RequestParam int id) {
+        return orderService.findByUserId_withUser(id);
     }
 
     @PostMapping(value = "/save")
-    public Order loadOrder(@RequestBody @Valid Order order) {
-        orderService.save(order);
-        return orderService.findById(order.getId());
+    public OrderDto loadOrder(@RequestBody @Valid OrderDto orderDto) {
+        orderService.save(orderDto);
+        return orderService.findById(orderDto.getId());
     }
 
     @PutMapping(value = "/update")
-    public Order updateOrder(@RequestBody @Valid Order order) {
-        orderService.update(order);
-        return orderService.findById(order.getId());
+    public OrderDto updateOrder(@RequestBody @Valid OrderDto orderDto) {
+        orderService.update(orderDto);
+        return orderService.findById(orderDto.getId());
     }
 
     @PostMapping(value = "/delete")
-    public void deleteOrder(@RequestBody Order order) {
-        orderService.delete(order);
+    public void deleteOrder(@RequestBody OrderDto orderDto) {
+        orderService.delete(orderDto);
     }
 
     @GetMapping(value = "/test")
