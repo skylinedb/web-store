@@ -9,7 +9,7 @@
     </div>
     <div class="form-group">
         <label for="RegistrationFormControlInputPass">Password</label>
-        <input type="password" class="form-control" id="RegistrationFormControlInputPass" placeholder="Password" [(ngModel)]="pass" [ngModelOptions]="{standalone: true}">
+        <input type="password" class="form-control" id="RegistrationFormControlInputPass" placeholder="Password" (keyup.enter)="loginUser()" [(ngModel)]="pass" [ngModelOptions]="{standalone: true} " >
     </div>
     <button type="button" class="btn" (click)="loginUser()">Авторизоваться</button>
     <br>

@@ -1,0 +1,44 @@
+{
+  "apiUrl": "http://localhost:8080/api",
+  "apiNameOrder": "/order",
+  "apiNameUser": "/user",
+  "apiNameContact": "/user/contact",
+  "apiNameProduct": "/product",
+  "Order": {
+    "findAll": "/findAll",
+    "findAll_withUser": "/findAll/user",
+    "findById": "/findById",
+    "findById_withUser": "/findById/user",
+    "findByUserId": "/findByUserId",
+    "findByUserId_withUser": "/findByUserId/user",
+    "loadOrder": "/save",
+    "updateOrder": "/update",
+    "deleteOrder": "/delete"
+  },
+  "Product": {
+    "findAll": "/findAll",
+    "findById": "/findById",
+    "loadProduct": "/save",
+    "updateProduct": "/update",
+    "deleteProduct": "/delete"},
+  "User": {
+    "findAll": "/findAll",
+    "findAll_withOrders": "/findAll/orders",
+    "findById": "/findById",
+    "findById_withOrders": "/findById/orders",
+    "findByEmail": "/findByEmail",
+    "findByEmail_withOrders": "/findByEmail/orders",
+    "loadUser": "/save",
+    "updateUser": "/update",
+    "deleteUser": "/delete"
+  },
+  "Contact": {
+    "findAll": "/findAll",
+    "findById": "/findById",
+    "findByUserId": "/findByUserId",
+    "loadContact": "/save",
+    "updateContact": "/update",
+    "deleteContact": "/delete"
+  }
+
+}

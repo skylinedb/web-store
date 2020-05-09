@@ -1,8 +1,13 @@
 package com.netcracker.butrik.webstore.service;
 
+import com.netcracker.butrik.webstore.dto.OrderDto;
+import com.netcracker.butrik.webstore.dto.mapper.impl.OrderMapperImpl;
+import com.netcracker.butrik.webstore.dto.mapper.impl.UserMapperImpl;
+import com.netcracker.butrik.webstore.model.Discount;
 import com.netcracker.butrik.webstore.model.Order;
 import com.netcracker.butrik.webstore.model.Product;
 import com.netcracker.butrik.webstore.model.User;
+import com.netcracker.butrik.webstore.repository.DiscountJpaRepository;
 import com.netcracker.butrik.webstore.repository.OrderJpaRepository;
 import com.netcracker.butrik.webstore.repository.UserJpaRepository;
 import java.util.List;
@@ -14,15 +19,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderService {
 
+    private static Logger log = LoggerFactory.getLogger(OrderService.class);
     @Autowired
     private OrderJpaRepository orderJpaRepository;
     @Autowired
     private UserJpaRepository userJpaRepository;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private DiscountJpaRepository discountJpaRepository;
+    @Autowired
+    private OrderMapperImpl orderMapper;
+    @Autowired
+    private UserMapperImpl userMapper;
 
-    private static Logger log = LoggerFactory.getLogger(OrderService.class);
-
-    public void save(final Order order) {
-        User user = userJpaRepository.findById(order.getUserId());
+    public void save(final OrderDto orderDto) {
+        Order order = orderMapper.fromDto(orderDto);
+        User user = userMapper.fromDto(userService.findById(order.getUserId()));
         double summ = 0, summ_discount;
         int discount = user.getDiscount_id().getPercent();
         List<Product> productList = order.getProducts();
@@ -37,47 +50,94 @@ public class OrderService {
         order.setSumm(summ);
         order.setSumm_discount(summ_discount);
         order.setDiscount_percent(discount);
+        order.setUser(user);
         orderJpaRepository.save(order);
+        double allSumm = testForDiscountByUserId(user.getId());
         log.info("Order: ID:"
-            +order.getId()
-            +" "+order.getUser().getLast_name()
-            +" "+order.getUser().getFirst_name()
-            +" "+order.getAddress()
-            +"  SAVE OPERATION");
+            + order.getId()
+            + " " + order.getUser().getLast_name()
+            + " " + order.getUser().getFirst_name()
+            + " " + order.getAddress()
+            + " " + allSumm
+            + "  SAVE OPERATION");
     }
 
-    public void update(final Order order) {
+    public void update(final OrderDto orderDto) {
+        Order order = orderMapper.fromDto(orderDto);
         orderJpaRepository.save(order);
         log.info("Order: ID:"
-            +order.getId()
-            +" "+order.getUser().getLast_name()
-            +" "+order.getUser().getFirst_name()
-            +" "+order.getAddress()
-            +"  UPDATE OPERATION");
+            + order.getId()
+            + " " + order.getUser().getLast_name()
+            + " " + order.getUser().getFirst_name()
+            + " " + order.getAddress()
+            + "  UPDATE OPERATION");
     }
 
-    public void delete(final Order order) {
+    public void delete(final OrderDto orderDto) {
+        Order order = orderMapper.fromDto(orderDto);
         orderJpaRepository.delete(order);
         log.info("Order: ID:"
-            +order.getId()
-            +" "+order.getUser().getLast_name()
-            +" "+order.getUser().getFirst_name()
-            +" "+order.getAddress()
-            +"  DELETE OPERATION");
+            + order.getId()
+            + " " + order.getUser().getLast_name()
+            + " " + order.getUser().getFirst_name()
+            + " " + order.getAddress()
+            + "  DELETE OPERATION");
     }
 
-    public Order findById(final int id) {
-        log.info("Order: ID:"+id+"  FindByID OPERATION");
-        return orderJpaRepository.findById(id);
+    public OrderDto findById(final int id) {
+        log.info("Order: ID:" + id + "  FindByID OPERATION");
+        Order order = orderJpaRepository.findById(id);
+        return orderMapper.toDto(order);
     }
 
-    public List<Order> findAll() {
+    public OrderDto findById_withUser(final int id) {
+        log.info("Order: ID:" + id + "  FindByID OPERATION");
+        Order order = orderJpaRepository.findById(id);
+        return orderMapper.toDtoWithUser(order);
+    }
+
+    public List<OrderDto> findAll() {
         log.info("Order: FindAll OPERATION");
-        return orderJpaRepository.findAll();
+        List<Order> orders = orderJpaRepository.findAll();
+        return orderMapper.toDtos(orders);
     }
 
-    public List<Order> findByUserId(final int userId) {
-        log.info("Order: UserID:"+userId+"  FindByUserID OPERATION");
-        return orderJpaRepository.findByUserId(userId);
+    public List<OrderDto> findAll_withUser() {
+        log.info("Order: FindAll_withUser OPERATION");
+        List<Order> orders = orderJpaRepository.findAll();
+        return orderMapper.toDtosWithUser(orders);
+    }
+
+    public List<OrderDto> findByUserId_withUser(final int userId) {
+        log.info("Order: UserID:" + userId + "  FindByUserID OPERATION");
+        List<Order> orders = orderJpaRepository.findByUserId(userId);
+        return orderMapper.toDtosWithUser(orders);
+    }
+    public List<OrderDto> findByUserId(final int userId) {
+        log.info("Order: UserID:" + userId + "  FindByUserID OPERATION");
+        List<Order> orders = orderJpaRepository.findByUserId(userId);
+        return orderMapper.toDtos(orders);
+    }
+
+
+    public double testForDiscountByUserId(final int userId) {
+        List<Order> orderList = orderMapper.fromDtos(findByUserId(userId));
+        double order_summ = 0;
+        for (int i = 0; i < orderList.size(); i++) {
+            order_summ = order_summ + orderList.get(i).getSumm_discount();
+        }
+        User user = userMapper.fromDto(userService.findById(userId));
+        if (order_summ >= user.getDiscount_id().getSumm()) {
+            List<Discount> discountList = discountJpaRepository.findAll();
+            discountList.sort(Discount::compareTo);
+            for (int i = 0; i < discountList.size(); i++) {
+                if (order_summ >= discountList.get(i).getSumm()) {
+                    log.info(user.getDiscount_id().getBadge());
+                    user.setDiscount_id(discountList.get(i));
+                }
+            }
+            userJpaRepository.save(user);
+        }
+        return order_summ;
     }
 }

@@ -14,6 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "USERS")
@@ -26,10 +27,14 @@ public class User {
 
     @Column(name = "FIRST_NAME")
     @NotBlank(message = "Необходимо указать Имя")
+    @Size(min = 2, message = "Имя не может быть меньше 2-х символов")
+    @Size(max = 30, message = "Имя не может быть больше 30 символов")
     private String first_name;
 
     @Column(name = "LAST_NAME")
     @NotBlank(message = "Необходимо указать Фамилию")
+    @Size(min = 2, message = "Фамилия не может быть меньше 2-х символов")
+    @Size(max = 30, message = "Фамилия не может быть больше 30 символов")
     private String last_name;
 
     @Column(name = "EMAIL")
@@ -41,8 +46,11 @@ public class User {
     private String pass;
 
     @Column(name = "ADMIN_TOGGLE")
-    @NotBlank
+//    @NotBlank
     private boolean admin_toggle;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Contact> contacts;
 
     @OneToOne
     @JoinColumn(name = "DISCOUNT_ID")
@@ -85,7 +93,9 @@ public class User {
         return last_name;
     }
 
-    public void setLast_name(String last_name) { this.last_name = last_name; }
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
 
     public String getEmail() {
         return email;
@@ -119,11 +129,19 @@ public class User {
         this.admin_toggle = admin_toogle;
     }
 
-    //    public List<Order> getOrders() {
-//        return orders;
-//    }
-//
-//    public void setOrders(List<Order> orders) {
-//        this.orders = orders;
-//    }
+    public List<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
 }

@@ -13,7 +13,8 @@ import { OrderComponent } from './order/order.component'
 import {HttpClientModule} from '@angular/common/http';
 import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
-import { AdminComponent } from './admin/admin.component'
+import { AdminComponent } from './admin/admin.component';
+import { ProfileComponent } from './profile/profile.component'
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { AdminComponent } from './admin/admin.component'
     LoginComponent,
     RegistrationComponent,
     AdminComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,

@@ -6,10 +6,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 @Entity
 @Table(name = "DISCOUNT")
-public class Discount {
+public class Discount implements Comparable<Discount>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +27,11 @@ public class Discount {
 //    @Min(value = 0, message = "Процент не может быть меньше 0")
 //    @Max(value = 99, message = "Процент не может быть больше 99")
     private int percent;
+
+    @Column(name = "SUMM")
+//    @Min(value = 0, message = "Процент не может быть меньше 0")
+//    @Max(value = 99, message = "Процент не может быть больше 99")
+    private int summ;
 
     public int getId() {
         return id;
@@ -48,5 +55,20 @@ public class Discount {
 
     public void setPercent(int discount_percent) {
         this.percent = discount_percent;
+    }
+
+    public int getSumm() {
+        return summ;
+    }
+
+    public void setSumm(int summ) {
+        this.summ = summ;
+    }
+
+    @Override
+    public int compareTo(Discount compareDiscount) {
+        int comparePercent = ((Discount) compareDiscount).getPercent();
+
+        return this.percent - comparePercent;
     }
 }
