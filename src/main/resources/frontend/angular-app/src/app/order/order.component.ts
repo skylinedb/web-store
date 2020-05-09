@@ -5,6 +5,8 @@ import {User} from '../models/user';
 import {delay} from 'rxjs/operators';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Router} from '@angular/router';
+// @ts-ignore
+import * as configuration from "src/app/config.json";
 
 
 @Component({
@@ -16,6 +18,15 @@ export class OrderComponent implements OnInit {
 
     constructor(private http: HttpClient, private router: Router) {
     }
+
+  apiUrl = configuration.apiUrl
+  orderUrl = configuration.apiNameOrder
+  productUrl = configuration.apiNameProduct
+  userUrl = configuration.apiNameUser
+  findAllProductsURL = configuration.Product.findAll
+  saveOrderURL = configuration.Order.loadOrder
+  findUserByIdURL=configuration.User.findById
+
 
     allProducts: Product[] = [];
     user: User;
@@ -31,7 +42,8 @@ export class OrderComponent implements OnInit {
 
     fetchProducts() {
         // this.loading = true;
-        this.http.get<Product[]>('http://localhost:8080/test/giveMeAllProducts')
+        // this.http.get<Product[]>('http://localhost:8080/test/giveMeAllProducts')
+        this.http.get<Product[]>(this.apiUrl+this.productUrl+this.findAllProductsURL)
             .pipe(delay(1500))
             .subscribe(todos => {
                 this.allProducts = todos;
@@ -41,7 +53,8 @@ export class OrderComponent implements OnInit {
 
     fetchUser() {
         let key = sessionStorage.getItem('token');
-        this.http.get<User>('http://localhost:8080/test/getUserById', {params: new HttpParams().set('id', key)})
+        // this.http.get<User>('http://localhost:8080/test/getUserById', {params: new HttpParams().set('id', key)})
+        this.http.get<User>(this.apiUrl+this.userUrl+this.findUserByIdURL, {params: new HttpParams().set('id', key)})
             .pipe(delay(1500))
             .subscribe(user => {
                 this.user = user;
@@ -63,13 +76,14 @@ export class OrderComponent implements OnInit {
         const current = new Date();
         const newOrder: Order = {
             address: this.address,
-            user_id: this.user.id,
+            userId: this.user.id,
             user: this.user,
             products: this.orderProducts,
             timestamp: current
         };
 
-        this.http.post<User>('http://localhost:8080/test/saveOrder', newOrder)
+        // this.http.post<User>('http://localhost:8080/test/saveOrder', newOrder)
+        this.http.post<Order>(this.apiUrl+this.orderUrl+this.saveOrderURL, newOrder)
             .subscribe(user => {
                 console.log('Order', newOrder);
                 // this.users.push(user);

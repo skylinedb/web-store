@@ -20,8 +20,8 @@ public class ContactType {
     @Column(name = "TYPE")
     private String type;
 
-    @OneToOne(mappedBy = "contactType")
-    private Contact contact;
+//    @OneToOne(mappedBy = "contactType")
+//    private Contact contact;
 
     public int getId() {
         return id;

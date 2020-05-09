@@ -46,7 +46,6 @@ public class ContactService {
 
         Contact contact = contactMapper.fromDto(contactDto);
         ContactTypeDto contactTypeDto = contactTypeMapper.toDto(contactType);
-//        contact.getUser().getId();
         User user = userMapper.fromDto(userService.findById(contact.getUser().getId()));
         contact.setContactType(contactTypeMapper.fromDto(contactTypeDto));
         contact.setUser(user);

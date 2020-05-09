@@ -11,6 +11,7 @@ import {OrdersComponent} from './orders/orders.component';
 import {OrderComponent} from './order/order.component';
 import {AdminComponent} from './admin/admin.component';
 import {AuthAdminGuard} from './authAdmin.guard';
+import {ProfileComponent} from "./profile/profile.component";
 
 
 const routes: Routes = [
@@ -20,6 +21,7 @@ const routes: Routes = [
   {path: 'registration' , component: RegistrationComponent},
   {path: 'orders' , component: OrdersComponent, canActivate: [AuthGuard]},
   {path: 'order' , component: OrderComponent, canActivate: [AuthGuard]},
+  {path: 'profile' , component: ProfileComponent, canActivate: [AuthGuard]},
   {path: 'admin' , component: AdminComponent, canActivate: [AuthAdminGuard]},
   {path: 'login' , component: LoginComponent},
   {path: 'error', component: ErrorPageComponent},

@@ -1,7 +1,8 @@
 export class Discount {
   constructor(
-    public discount_badge: string,
-    public discount_percent: number,
+    public badge: string,
+    public percent: number,
+    public summ: number,
     public id?: number
   ) {
 

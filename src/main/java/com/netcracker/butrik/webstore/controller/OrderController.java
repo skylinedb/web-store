@@ -42,13 +42,13 @@ public class OrderController {
         return orderService.findById(id);
     }
 
-//    @GetMapping(value = "/findByUserId")
-//    public List<OrderDto> findByOrderId(@RequestParam int id) {
-//        return orderService.findByUserId(id);
-//    }
+    @GetMapping(value = "/findByUserId")
+    public List<OrderDto> findByUserId(@RequestParam int id) {
+        return orderService.findByUserId(id);
+    }
 
     @GetMapping(value = "/findByUserId/user")
-    public List<OrderDto> findByOrderId_withUser(@RequestParam int id) {
+    public List<OrderDto> findByUserId_withUser(@RequestParam int id) {
         return orderService.findByUserId_withUser(id);
     }
 

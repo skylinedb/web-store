@@ -5,7 +5,7 @@ import {User} from './user';
 export class Order {
     constructor(
         public address: string,
-        public user_id?: number,
+        public userId?: number,
         public user?: User,
         public id?: number,
         public products?: Array<Product>,
