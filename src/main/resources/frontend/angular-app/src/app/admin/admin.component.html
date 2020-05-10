@@ -1,21 +1,60 @@
 <h2>Просмотр-удаление пользователей</h2>
 <div class="card" *ngFor="let users of allUsers; let i = index">
-    <p>
-        <span >{{i+1}}. {{users.last_name}}  {{users.first_name}}</span>
-        <span>
-            <button class="btn btn-danger" (click)="activateReset(i)" >Сбросить пароль</button>
-            <button class="btn btn-danger" (click)="deleteUser(i)" >Удалить</button>
+  <p>
+    <span>{{i + 1}}. {{users.last_name}}  {{users.first_name}}</span>
+    <span>
+            <button class="btn btn-danger" (click)="activateContacts(i)">Контакты</button>
+            <button class="btn btn-danger" (click)="activateReset(i)">Сбросить пароль</button>
+            <button class="btn btn-danger" (click)="deleteUser(i)">Удалить</button>
           </span>
-    </p>
+  </p>
 </div>
 <div class="form-group" *ngIf="resetActive">
-    <label for="UpdateFormControlInputPass">Password</label>
-    <input type="password" class="form-control" id="UpdateFormControlInputPass" placeholder="Password" [(ngModel)]="newResetPass" [ngModelOptions]="{standalone: true}">
-    <button type="button" class="btn btn-danger" (click)="resetPassword(idOfReset)">Сохранить новый пароль</button>
+  <label for="UpdateFormControlInputPass">Password</label>
+  <input type="password" class="form-control" id="UpdateFormControlInputPass" placeholder="Password"
+         [(ngModel)]="newResetPass" [ngModelOptions]="{standalone: true}">
+  <button type="button" class="btn btn-danger" (click)="resetPassword(idOfReset)">Сохранить новый пароль</button>
+  <br>
+  <br>
+  <br>
+  <br>
+</div>
+<div class="form-group" *ngIf="contactActive">
+  <label for="UpdateFormControlInputPass">Contacts of {{nameOfUserWhichContacts}}</label>
+  <div class="card" *ngFor="let contacts of contacts; let l = index">
+    <p>
+      <span>{{l + 1}}. {{contacts.type_label}}  {{contacts.value}}</span>
+      <span>
+            <button class="btn btn-danger" (click)="deleteContact(l)">Удалить</button>
+          </span>
+    </p>
+  </div>
+  <br>
+  <br>
+  <br>
+  <div class="form-group">
+    <h2>Создать новый контакт для {{nameOfUserWhichContacts}}</h2>
+    <form [formGroup]="contactForm">
+      <label>Выберите тип контакта</label>
+      <select formControlName="contactType" [(ngModel)]="contactChoose">
+        <option [ngValue]="null" disabled>Choose your type</option>
+        <option *ngFor="let tp of contactTypes" [ngValue]="tp">
+          {{ tp.type}}
+        </option>
+      </select>
+      <input type="text" class="form-control" id="CreateFormControlInputContactType" placeholder="Тип контакта"
+             [(ngModel)]="typeOfContact" [ngModelOptions]="{standalone: true}">
+      <label>{{errorMessage}}</label>
+      <button type="button" class="btn btn-danger" (click)="setContactType()">Выбрать</button>
+      <br>
+      <br>
+      <input type="text" class="form-control" id="CreateFormControlInputContactValue" placeholder="Введите значение"
+             [(ngModel)]="valueOfContact" [ngModelOptions]="{standalone: true}">
+      <button type="button" class="btn btn-danger" (click)="createContact()">Отправить</button>
+    </form>
     <br>
     <br>
-    <br>
-    <br>
+  </div>
 </div>
 
 <button class="btn btn-danger" (click)="fetchUsers()">Обновить</button>
@@ -24,16 +63,17 @@
 <br>
 <h2>Просмотр-удаление заказов</h2>
 <div class="card" *ngFor="let ordersinline of allOrders, let i=index">
-            <span>Заказ номер {{i+1}}: Пользователь {{ordersinline.user.last_name}} {{ordersinline.user.first_name}}
-                от {{ordersinline.timestamp| date : 'yyyy-MM-dd HH:mm:ss':'+0600'}}
+            <span>Заказ номер {{i + 1}}: Пользователь {{ordersinline.user.last_name}} {{ordersinline.user.first_name}}
+              от {{ordersinline.timestamp| date : 'yyyy-MM-dd HH:mm:ss':'+0600'}}
 
-                <br>
+              <br>
             Заказал:
-            <div class="card" *ngFor="let products of ordersinline.products, let j=index">{{j+1}}. {{products.product_name}} Цена: {{products.product_price}}Руб.</div>
+            <div class="card" *ngFor="let products of ordersinline.products, let j=index">{{j + 1}}
+              . {{products.product_name}} Цена: {{products.product_price}}Руб.</div>
             По адресу: {{ordersinline.address}}
+              <br>
                 <br>
-                <br>
-                 <button class="btn btn-danger" (click)="deleteOrder(i)" >Удалить</button>
+                 <button class="btn btn-danger" (click)="deleteOrder(i)">Удалить</button>
                 <br>
             </span>
 </div>
@@ -43,21 +83,23 @@
 <br>
 <h2>Создание-удаление продуктов</h2>
 <div class="card" *ngFor="let products of allProducts; let i = index">
-    <p>
-        <span >{{i+1}}. {{products.product_name}} Цена: {{products.product_price}} Руб.</span>
-        <span>
-            <button class="btn btn-danger" (click)="deleteProduct(i)" >Удалить</button>
+  <p>
+    <span>{{i + 1}}. {{products.product_name}} Цена: {{products.product_price}} Руб.</span>
+    <span>
+            <button class="btn btn-danger" (click)="deleteProduct(i)">Удалить</button>
           </span>
-    </p>
+  </p>
 </div>
 <div class="form-group" *ngIf="createProductFlag">
-    <input type="text" class="form-control" id="CreateFormControlInputProductName" placeholder="Name of Product" [(ngModel)]="nameOfProduct" [ngModelOptions]="{standalone: true}">
-    <input type="text" class="form-control" id="CreateFormControlInputProductPrice" placeholder="Price" [(ngModel)]="priceOfProduct" [ngModelOptions]="{standalone: true}">
-    <button type="button" class="btn btn-danger" (click)="createProduct()">Записать</button>
-    <br>
-    <br>
-    <br>
-    <br>
+  <input type="text" class="form-control" id="CreateFormControlInputProductName" placeholder="Name of Product"
+         [(ngModel)]="nameOfProduct" [ngModelOptions]="{standalone: true}">
+  <input type="text" class="form-control" id="CreateFormControlInputProductPrice" placeholder="Price"
+         [(ngModel)]="priceOfProduct" [ngModelOptions]="{standalone: true}">
+  <button type="button" class="btn btn-danger" (click)="createProduct()">Записать</button>
+  <br>
+  <br>
+  <br>
+  <br>
 </div>
 <button class="btn btn-danger" (click)="fetchProducts()">Обновить</button>
 <button class="btn btn-danger" (click)="activateCreateProduct()">Создать продукт</button>

@@ -1,8 +1,11 @@
-<h1>About page</h1>
+<form class="example-form">
+  <mat-form-field class="example-full-width">
+    <mat-label>Favorite food</mat-label>
+    <input matInput placeholder="Ex. Pizza" value="Sushi">
+  </mat-form-field>
 
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet, magnam!</p>
-
-<p><a [routerLink]="['/about', 'extra']">Show Extra</a></p>
-
-<router-outlet></router-outlet>
-
+  <mat-form-field class="example-full-width">
+    <mat-label>Leave a comment</mat-label>
+    <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+  </mat-form-field>
+</form>

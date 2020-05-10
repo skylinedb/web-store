@@ -7,11 +7,11 @@ import {Product} from '../models/product';
 // @ts-ignore
 import * as configuration from "src/app/config.json";
 
-export interface Product {
-    product_name: string
-    product_price: string
-    id?: number
-}
+// export interface Product {
+//     product_name: string
+//     product_price: string
+//     id?: number
+// }
 
 @Component({
     selector: 'app-orders',
@@ -28,7 +28,7 @@ export class OrdersComponent implements OnInit {
   // asdas=this.apiUrl+
     loading = false;
     orders: Order[] = [];
-    products: Product [] = [];
+    products: Product[] = [];
 
     constructor(private http: HttpClient) {
     }

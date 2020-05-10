@@ -34,6 +34,7 @@
   },
   "Contact": {
     "findAll": "/findAll",
+    "findAllTypes": "/findAllTypes",
     "findById": "/findById",
     "findByUserId": "/findByUserId",
     "loadContact": "/save",

@@ -7,6 +7,9 @@ import {Md5} from 'ts-md5/dist/md5';
 import {error} from "util";
 // @ts-ignore
 import * as configuration from "src/app/config.json";
+import {Contact} from "../models/contact";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {ContactType} from "../models/contactType";
 
 @Component({
   selector: 'app-admin',
@@ -18,6 +21,7 @@ export class AdminComponent implements OnInit {
   orderUrl = configuration.apiNameOrder
   productUrl = configuration.apiNameProduct
   userUrl = configuration.apiNameUser
+  contactUrl = configuration.apiNameContact
   findAllUsersURL = configuration.User.findAll
   findAllProductsURL = configuration.Product.findAll
   findAllOrdersWithUserURL = configuration.Order.findAll_withUser
@@ -26,30 +30,56 @@ export class AdminComponent implements OnInit {
   deleteOrderURL = configuration.Order.deleteOrder
   updateUserURL = configuration.User.deleteUser
   saveProductURL = configuration.Product.loadProduct
+  findContactByUserIdURL = configuration.Contact.findByUserId;
+  deleteContactUrl = configuration.Contact.deleteContact;
+  findAllContactTypes = configuration.Contact.findAllTypes;
+  saveContactURL = configuration.Contact.loadContact;
 
 
   allOrders: Order[] = [];
   allUsers: User[] = [];
   allProducts: Product[] = [];
+  contacts: Contact[] = [];
   resetActive: boolean = false;
   idOfReset: number;
   newResetPass = '';
   createProductFlag: boolean = false;
   priceOfProduct = '';
   nameOfProduct = '';
+  contactActive: boolean = false;
+  nameOfUserWhichContacts = '';
+  contactForm: FormGroup;
+  contactChoose: ContactType;
+  contactTypes: ContactType[] = [];
+  typeOfContact = '';
+  errorMessage = '';
+  valueOfContact = '';
+  userForm: FormGroup;
+  userChoose: User;
 
-  constructor(private http: HttpClient) {
+
+
+
+
+
+  constructor(private http: HttpClient, private formBuilder: FormBuilder) {
+
   }
 
   ngOnInit() {
     this.fetchUsers();
     this.fetchOrders();
-    this.fetchProducts();
+    this.fetchProducts()
+    this.userForm=this.formBuilder.group(
+      {user: [null]}
+    );
+    this.contactForm = this.formBuilder.group(
+      {contactType: [null]}
+    );
+
   }
 
   fetchUsers() {
-    // this.http.get<User[]>('http://localhost:8080/test/giveMeAllUsers')
-    // this.http.get<User[]>('http://localhost:8080/api/user/findAll')
     this.http.get<User[]>(this.apiUrl + this.userUrl + this.findAllUsersURL)
       .subscribe(users => {
         this.allUsers = users;
@@ -57,8 +87,6 @@ export class AdminComponent implements OnInit {
   }
 
   fetchProducts() {
-    // this.http.get<Product[]>('http://localhost:8080/test/giveMeAllProducts')
-    //   this.http.get<Product[]>('http://localhost:8080/api/product/findAll')
     this.http.get<Product[]>(this.apiUrl + this.productUrl + this.findAllProductsURL)
       .subscribe(products => {
         this.allProducts = products;
@@ -67,8 +95,6 @@ export class AdminComponent implements OnInit {
 
   fetchOrders() {
     new Date().getTimezoneOffset();
-    // this.http.get<Order[]>('http://localhost:8080/test//giveMeAllOrders')
-    //   this.http.get<Order[]>('http://localhost:8080/api/order/findAll')
     this.http.get<Order[]>(this.apiUrl + this.orderUrl + this.findAllOrdersWithUserURL)
       .subscribe(orders => {
         orders.sort((a, b) => <any>new Date(b.timestamp) - <any>new Date(a.timestamp));
@@ -78,7 +104,6 @@ export class AdminComponent implements OnInit {
 
   deleteProduct(i: number) {
     let deleteProduct = this.allProducts[i];
-    // this.http.post<Product>('http://localhost:8080/test/deleteProduct', deleteProduct)
     this.http.post<Product>(this.apiUrl + this.productUrl + this.deleteProductURL, deleteProduct)
       .subscribe(delProduct => {
         this.allProducts.splice(i, 1);
@@ -87,7 +112,6 @@ export class AdminComponent implements OnInit {
 
   deleteOrder(i: number) {
     let deleteOrder = this.allOrders[i];
-    // this.http.post<Order>('http://localhost:8080/test/deleteOrder', deleteOrder)
     this.http.post<Order>(this.apiUrl + this.orderUrl + this.deleteOrderURL, deleteOrder)
       .subscribe(delOrder => {
         this.allOrders.splice(i, 1);
@@ -96,7 +120,6 @@ export class AdminComponent implements OnInit {
 
   deleteUser(i: number) {
     let deleteUser = this.allUsers[i];
-    // this.http.post<User>('http://localhost:8080/test/deleteUser', deleteUser)
     this.http.post<User>(this.apiUrl + this.userUrl + this.deleteUserURL, deleteUser)
       .subscribe(delUser => {
         this.allUsers.splice(i, 1);
@@ -107,7 +130,6 @@ export class AdminComponent implements OnInit {
     let resetPasswordUser = this.allUsers[i];
     let newPassword: any = Md5.hashStr(this.newResetPass);
     resetPasswordUser.pass = newPassword;
-    // this.http.post<User>('http://localhost:8080/test/updateUser', resetPasswordUser)
     this.http.post<User>(this.apiUrl + this.userUrl + this.updateUserURL, resetPasswordUser)
       .subscribe(delUser => {
         console.log(resetPasswordUser);
@@ -126,7 +148,6 @@ export class AdminComponent implements OnInit {
       product_price: this.priceOfProduct,
     };
 
-    // this.http.post<User>('http://localhost:8080/test/saveProduct', newProduct)
     this.http.post<Product>(this.apiUrl + this.productUrl + this.saveProductURL, newProduct)
       .subscribe(product => {
         console.log('Product', newProduct);
@@ -138,5 +159,63 @@ export class AdminComponent implements OnInit {
 
   activateCreateProduct() {
     this.createProductFlag = true;
+  }
+
+  activateContacts(i: number) {
+    this.getContactTypes();
+    this.nameOfUserWhichContacts = this.allUsers[i].first_name +' '+ this.allUsers[i].last_name;
+    this.contactActive = true;
+
+    let key = this.allUsers[i].id;
+    sessionStorage.setItem('idForNewContact', key.toString());
+
+    this.http.get<Contact[]>(this.apiUrl + this.contactUrl + this.findContactByUserIdURL, {params: new HttpParams().set('id', String(key))})
+      .subscribe(contacts => {
+        console.log(contacts);
+        this.contacts = contacts;
+      });
+  }
+
+  getContactTypes() {
+    this.http.get<ContactType[]>(this.apiUrl + this.contactUrl + this.findAllContactTypes)
+      .subscribe(contacts => {
+        this.contactTypes = contacts;
+      });
+  }
+
+  deleteContact(l: number) {
+    let deleteContact = this.contacts[l];
+    this.http.post<Contact>(this.apiUrl + this.contactUrl + this.deleteContactUrl, deleteContact)
+      .subscribe(deleteContact => {
+        this.contacts.splice(l, 1);
+      });
+  }
+
+  setContactType() {
+    this.typeOfContact = this.contactChoose.type;
+  }
+
+  createContact() {
+    console.log(this.userChoose);
+    let id =     sessionStorage.getItem('idForNewContact');;
+    if (this.typeOfContact == '') {
+      this.errorMessage = 'Выберите тип и нажмите кнопку "выбрать" или введите свой тип контакта';
+    } else {
+
+
+
+      const newContact: Contact = {
+        type_label: this.typeOfContact,
+        value: this.valueOfContact,
+        userId: id
+      };
+
+      this.http.post<Contact>(this.apiUrl + this.contactUrl + this.saveContactURL, newContact)
+        .subscribe(newContact => {
+          this.typeOfContact = '';
+          this.valueOfContact = '';
+          console.log(newContact);
+        });
+    }
   }
 }

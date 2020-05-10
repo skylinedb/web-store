@@ -42,26 +42,7 @@ export class LoginComponent implements OnInit {
     // this.http.get<User>('http://localhost:8080/api/user/findByEmail', {params: new HttpParams().set('email', this.email)})
     this.http.get<User>(this.apiUrl + this.userUrl + this.findUserByEmailURL, {params: new HttpParams().set('email', this.email)})
       .subscribe(user => {
-        // if (user != null) {
-        //     if (Md5.hashStr(this.pass) == user.pass) {
-        //         this.authSuccess = true;
-        //         if (user.admin_toggle == true) {
-        //             this.authAdmin.login();
-        //         }
-        //         sessionStorage.setItem('token', user.id.toString());
-        //         sessionStorage.getItem('token');
-        //         this.auth.login();
-        //         this.testCredentials = 'Успешно';
-        //         this.router.navigateByUrl(this.returnUrl);
-        //         // window.location.replace('/');
-        //     } else {
-        //         this.testCredentials = 'Неправильный пароль';
-        //     }
-        // } else {
-        //     this.testCredentials = 'Нет такой почты';
-        // }
         this.loginService(user);
-
       });
   }
 
