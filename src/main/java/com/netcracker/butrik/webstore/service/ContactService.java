@@ -90,6 +90,13 @@ public class ContactService {
         return contactMapper.toDtos(contacts);
     }
 
+    public List<ContactTypeDto> findAllTypes() {
+        log.info("Contact: FindAll OPERATION");
+        List<ContactType> contactTypes = contactTypeJpaRepository.findAll();
+        return contactTypeMapper.toDtos(contactTypes);
+    }
+
+
     public List<ContactDto> findByUserId(int id) {
         log.info("Contact: ID:" + id + "  FindByUserID OPERATION");
         List<Contact> contacts = contactJpaRepository.findByUserId(id);

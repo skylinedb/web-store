@@ -52,6 +52,11 @@ public class OrderController {
         return orderService.findByUserId_withUser(id);
     }
 
+    @GetMapping(value = "/getOrdersByDateAndUserId")
+    public List<OrderDto> getOrdersByDateAndUserId(@RequestParam String startDate, String endDate, int userId) {
+        return orderService.getOrdersByDateAndUserId(startDate, endDate, userId);
+    }
+
     @PostMapping(value = "/save")
     public OrderDto loadOrder(@RequestBody @Valid OrderDto orderDto) {
         orderService.save(orderDto);
@@ -69,8 +74,4 @@ public class OrderController {
         orderService.delete(orderDto);
     }
 
-    @GetMapping(value = "/test")
-    public double getSummUserId(@RequestParam int userId) {
-        return orderService.testForDiscountByUserId(userId);
-    }
 }

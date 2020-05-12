@@ -1,6 +1,7 @@
 package com.netcracker.butrik.webstore.controller;
 
 import com.netcracker.butrik.webstore.dto.ContactDto;
+import com.netcracker.butrik.webstore.dto.ContactTypeDto;
 import com.netcracker.butrik.webstore.model.Contact;
 import com.netcracker.butrik.webstore.service.ContactService;
 import java.util.List;
@@ -27,6 +28,11 @@ public class ContactController {
     @GetMapping(value = "/findAll")
     public List<ContactDto> findAll() {
         return contactService.findAll();
+    }
+
+    @GetMapping(value = "/findAllTypes")
+    public List<ContactTypeDto> findAllTypes() {
+        return contactService.findAllTypes();
     }
 
     @GetMapping(value = "/findById")

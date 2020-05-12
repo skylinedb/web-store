@@ -11,7 +11,7 @@ export class AuthService {
     logout() {
         this.isAuth = false;
         sessionStorage.removeItem('token');
-        window.location.replace('http://localhost:4200/');
+        window.location.replace('/');
     }
 
   isAuthenticated(): Promise<boolean> {

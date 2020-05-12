@@ -1,8 +1,12 @@
 package com.netcracker.butrik.webstore.dto.mapper.impl;
 
+import com.netcracker.butrik.webstore.dto.ContactDto;
 import com.netcracker.butrik.webstore.dto.ContactTypeDto;
 import com.netcracker.butrik.webstore.dto.mapper.ContactTypeMapper;
+import com.netcracker.butrik.webstore.model.Contact;
 import com.netcracker.butrik.webstore.model.ContactType;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.Generated;
 import org.springframework.stereotype.Component;
 
@@ -40,5 +44,19 @@ public class ContactTypeMapperImpl implements ContactTypeMapper {
         contactType.setType(contactTypeDto.getType());
 
         return contactType;
+    }
+
+    @Override
+    public List<ContactTypeDto> toDtos(List<ContactType> contacts) {
+        if ( contacts == null ) {
+            return null;
+        }
+
+        List<ContactTypeDto> list = new ArrayList<ContactTypeDto>( contacts.size() );
+        for ( ContactType contact : contacts ) {
+            list.add( toDto( contact ) );
+        }
+
+        return list;
     }
 }

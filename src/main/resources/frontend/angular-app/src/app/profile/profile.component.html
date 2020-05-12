@@ -1,28 +1,44 @@
 <div *ngIf="!loading; else loadingBlock">
   Мои контакты
-  <button (click)="contactToggle = !contactToggle">Показать</button>
+  <button type="button" (click)="contactToggle = !contactToggle">Показать</button>
   <p *ngIf="contactToggle">
       <span>
         <div class="card" *ngFor="let contacts of contacts, let j=index">
-          {{j + 1}}. {{contacts.type_label}} : {{contacts.value}}  <button class="btn btn-danger" (click)="deleteContact(j)">Удалить</button></div>
-        <button class="btn btn-danger" (click)="activateCreateContact()">Добавить контакт</button>
+          {{j + 1}}. {{contacts.type_label}} : {{contacts.value}}
+          <button class="btn btn-danger" (click)="deleteContact(j)">Удалить</button></div>
+        <button class="btn" (click)="createContactFlag = !createContactFlag">Добавить контакт</button>
       </span>
     <br>
     <br>
-<!--    <button class="btn btn-danger" (click)="activateCreateContact()">Добавить контакт</button>-->
   </p>
-    <div class="form-group" *ngIf="createContactFlag">
-      <input type="text" class="form-control" id="CreateFormControlInputContactName" placeholder="Name of Product" [(ngModel)]="nameOfProduct" [ngModelOptions]="{standalone: true}">
-      <input type="text" class="form-control" id="CreateFormControlInputContactValue" placeholder="Введите" [(ngModel)]="valueOfContact" [ngModelOptions]="{standalone: true}">
-      <button type="button" class="btn btn-danger" (click)="createContact()">Записать</button>
-      <br>
-      <br>
-      <br>
-      <br>
-    </div>
+  <div class="form-group" *ngIf="createContactFlag">
+        <form [formGroup]="contactForm">
+          <select formControlName="contactType" [(ngModel)]="contactChoose" >
+            <option [ngValue]="null" disabled>Choose your type</option>
+            <option *ngFor="let tp of contactTypes" [ngValue]="tp">
+              {{ tp.type}}
+            </option>
+          </select>
+          <input type="text" class="form-control" id="CreateFormControlInputContactType" placeholder="Нажмите выбрать или введите свой тип контакта"
+                 [(ngModel)]="typeOfContact" [ngModelOptions]="{standalone: true}">
+          <label>{{errorMessage}}</label>
+          <br>
+          <button type="button" class="btn btn-danger" (click)="setContactType()">Выбрать</button>
+          <br>
+          <input type="text" class="form-control" id="CreateFormControlInputContactValue" placeholder="Введите значение"
+                 [(ngModel)]="valueOfContact" [ngModelOptions]="{standalone: true}">
+          <button type="button" class="btn btn-danger" (click)="createContact()">Отправить</button>
+        </form>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
   <br>
+
+
   Мои заказы
-  <button (click)="ordersToggle = !ordersToggle">Показать</button>
+  <button type="button" (click)="ordersToggle = !ordersToggle">Скрыть</button>
 
   <div *ngIf="orders.length; else noTodos">
     <div class="card" *ngFor="let ordersinline of orders, let i=index">
@@ -44,7 +60,6 @@
             </span>
       </p>
     </div>
-
   </div>
 
   <ng-template #noTodos>

@@ -1,16 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Md5} from 'ts-md5/dist/md5';
-// @ts-ignore
 import * as configuration from "src/app/config.json";
+import {User} from "../models/user";
 
-export interface User {
-  first_name: string
-  last_name: string
-  email: string
-  pass: string
-  id?: number
-}
 
 
 @Component({
