@@ -41,7 +41,7 @@ export class ProfileComponent implements OnInit {
   valueOfContact = '';
   contactForm: FormGroup;
   contactChoose: ContactType;
-  otherTypeActivate: boolean = false;
+  // otherTypeActivate: boolean = false;
   form: FormGroup;
   errorMessage = '';
 

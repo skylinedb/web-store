@@ -11,6 +11,7 @@
     "findById_withUser": "/findById/user",
     "findByUserId": "/findByUserId",
     "findByUserId_withUser": "/findByUserId/user",
+    "findByUserIdAndDate": "/getOrdersByDateAndUserId",
     "loadOrder": "/save",
     "updateOrder": "/update",
     "deleteOrder": "/delete"
@@ -18,9 +19,11 @@
   "Product": {
     "findAll": "/findAll",
     "findById": "/findById",
+    "findByUserIdAndDate": "/getProductsByDateAndUserId",
     "loadProduct": "/save",
     "updateProduct": "/update",
-    "deleteProduct": "/delete"},
+    "deleteProduct": "/delete"
+  },
   "User": {
     "findAll": "/findAll",
     "findAll_withOrders": "/findAll/orders",

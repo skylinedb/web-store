@@ -1,9 +1,9 @@
 <h2>Просмотр-удаление пользователей</h2>
 <div class="card" *ngFor="let users of allUsers; let i = index">
   <p>
-    <span>{{i + 1}}. {{users.last_name}}  {{users.first_name}}</span>
+    <span>{{i + 1}}. {{users.last_name}}  {{users.first_name}} Админ: {{users.admin_toggle}}</span>
     <span>
-            <button class="btn btn-danger" (click)="activateContacts(i)">Контакты</button>
+            <button class="btn btn-danger" (click)="activateContacts(i)">Подробнее</button>
             <button class="btn btn-danger" (click)="activateReset(i)">Сбросить пароль</button>
             <button class="btn btn-danger" (click)="deleteUser(i)">Удалить</button>
           </span>
@@ -20,7 +20,17 @@
   <br>
 </div>
 <div class="form-group" *ngIf="contactActive">
-  <label for="UpdateFormControlInputPass">Contacts of {{nameOfUserWhichContacts}}</label>
+  <h2>Сделать пользователя админом</h2>
+  <br>
+  <div class="card">
+    <select [(ngModel)]="adminToggle">
+      <option [value]="false">Пользователь</option>
+      <option [value]="true">Админ</option>
+    </select>
+    <button type="button" class="btn btn-danger" (click)="chooseAdmin()">Подтвердить</button>
+  </div>
+  <br>
+  <h2>Контакты {{nameOfUserWhichContacts}}</h2>
   <div class="card" *ngFor="let contacts of contacts; let l = index">
     <p>
       <span>{{l + 1}}. {{contacts.type_label}}  {{contacts.value}}</span>
@@ -31,41 +41,39 @@
   </div>
   <br>
   <br>
-  <br>
   <div class="form-group">
     <h2>Создать новый контакт для {{nameOfUserWhichContacts}}</h2>
-    <form [formGroup]="contactForm">
-      <label>Выберите тип контакта</label>
-      <select formControlName="contactType" [(ngModel)]="contactChoose">
-        <option [ngValue]="null" disabled>Choose your type</option>
-        <option *ngFor="let tp of contactTypes" [ngValue]="tp">
-          {{ tp.type}}
-        </option>
-      </select>
-      <input type="text" class="form-control" id="CreateFormControlInputContactType" placeholder="Тип контакта"
-             [(ngModel)]="typeOfContact" [ngModelOptions]="{standalone: true}">
-      <label>{{errorMessage}}</label>
-      <button type="button" class="btn btn-danger" (click)="setContactType()">Выбрать</button>
-      <br>
-      <br>
-      <input type="text" class="form-control" id="CreateFormControlInputContactValue" placeholder="Введите значение"
-             [(ngModel)]="valueOfContact" [ngModelOptions]="{standalone: true}">
-      <button type="button" class="btn btn-danger" (click)="createContact()">Отправить</button>
-    </form>
+    <div class="card">
+      <form [formGroup]="contactForm">
+        <label>Выберите тип контакта</label>
+        <select formControlName="contactType" [(ngModel)]="contactChoose">
+          <option [ngValue]="null" disabled>Choose your type</option>
+          <option *ngFor="let tp of contactTypes" [ngValue]="tp">
+            {{ tp.type}}
+          </option>
+        </select>
+        <input type="text" class="form-control" id="CreateFormControlInputContactType"
+               placeholder="Нажмите выбрать или введите свой тип контакта"
+               [(ngModel)]="typeOfContact" [ngModelOptions]="{standalone: true}">
+        <label>{{errorMessage}}</label>
+        <button type="button" class="btn btn-danger" (click)="setContactType()">Выбрать</button>
+        <br>
+        <br>
+        <input type="text" class="form-control" id="CreateFormControlInputContactValue" placeholder="Введите значение"
+               [(ngModel)]="valueOfContact" [ngModelOptions]="{standalone: true}">
+        <button type="button" class="btn btn-danger" (click)="createContact()">Отправить</button>
+      </form>
+    </div>
     <br>
     <br>
   </div>
 </div>
-
 <button class="btn btn-danger" (click)="fetchUsers()">Обновить</button>
-
-
 <br>
 <h2>Просмотр-удаление заказов</h2>
 <div class="card" *ngFor="let ordersinline of allOrders, let i=index">
             <span>Заказ номер {{i + 1}}: Пользователь {{ordersinline.user.last_name}} {{ordersinline.user.first_name}}
               от {{ordersinline.timestamp| date : 'yyyy-MM-dd HH:mm:ss':'+0600'}}
-
               <br>
             Заказал:
             <div class="card" *ngFor="let products of ordersinline.products, let j=index">{{j + 1}}
@@ -78,8 +86,6 @@
             </span>
 </div>
 <button class="btn btn-danger" (click)="fetchOrders()">Обновить</button>
-
-
 <br>
 <h2>Создание-удаление продуктов</h2>
 <div class="card" *ngFor="let products of allProducts; let i = index">
@@ -103,3 +109,35 @@
 </div>
 <button class="btn btn-danger" (click)="fetchProducts()">Обновить</button>
 <button class="btn btn-danger" (click)="activateCreateProduct()">Создать продукт</button>
+<div class="card">
+  <h2>Узнать количества заказанных продуктов у пользователя</h2>
+
+  <div>
+    <input type="date" [ngModel]="dtStart | date:'yyyy-MM-dd'" (ngModelChange)="dtStart = $event">
+
+  </div>
+  <div>
+    <input type="date" [ngModel]="dtEnd | date:'yyyy-MM-dd'" (ngModelChange)="dtEnd = $event">
+
+  </div>
+  <div class="card">
+    <form [formGroup]="userForm">
+      <select formControlName="selUser" [(ngModel)]="userChoose">
+        <option [ngValue]="null" disabled>Choose User</option>
+        <option *ngFor="let user of allUsers" [ngValue]="user">
+          {{ user.first_name}}  {{user.last_name}}
+        </option>
+      </select>
+    </form>
+  </div>
+  <button class="btn btn-danger" (click)="queryListOfProduct()">Запрос</button>
+
+  <div class="card" *ngFor="let orders of selUserOrders; let u = index">
+    {{orders.timestamp | date:'dd-MM-yyyy'}} Сумма:{{orders.summ}}.руб Сумма со скидкой:{{orders.summ_discount}}.руб
+    <div *ngFor="let products of orders.products; let u = index">
+      <span> {{products.product_name}}  {{products.product_price}}.руб</span>
+    </div>
+
+  </div>
+
+</div>

@@ -33,6 +33,11 @@ public class ProductController {
         return productService.findById(id);
     }
 
+    @GetMapping(value = "/getProductsByDateAndUserId")
+    public List<ProductDto> getProductsByDateAndUserId(@RequestParam String startDate,String endDate, int userId) {
+        return productService.getProductsByDateAndUserId(startDate, endDate, userId);
+    }
+
     @PostMapping(value = "/save")
     public ProductDto loadProduct(@RequestBody @Valid ProductDto productDto) {
         productService.save(productDto);

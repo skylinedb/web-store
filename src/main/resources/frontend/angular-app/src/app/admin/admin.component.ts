@@ -5,11 +5,13 @@ import {User} from '../models/user';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Md5} from 'ts-md5/dist/md5';
 import {error} from "util";
-// @ts-ignore
 import * as configuration from "src/app/config.json";
 import {Contact} from "../models/contact";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {ContactType} from "../models/contactType";
+import {catchError} from "rxjs/operators";
+import {throwError} from "rxjs";
+import {Discount} from "../models/discount";
 
 @Component({
   selector: 'app-admin',
@@ -28,13 +30,13 @@ export class AdminComponent implements OnInit {
   deleteProductURL = configuration.Product.deleteProduct
   deleteUserURL = configuration.User.deleteUser
   deleteOrderURL = configuration.Order.deleteOrder
-  updateUserURL = configuration.User.deleteUser
+  updateUserURL = configuration.User.updateUser
   saveProductURL = configuration.Product.loadProduct
   findContactByUserIdURL = configuration.Contact.findByUserId;
   deleteContactUrl = configuration.Contact.deleteContact;
   findAllContactTypes = configuration.Contact.findAllTypes;
   saveContactURL = configuration.Contact.loadContact;
-
+  findOrdersByUserIdAndDate = configuration.Order.findByUserIdAndDate;
 
   allOrders: Order[] = [];
   allUsers: User[] = [];
@@ -56,8 +58,10 @@ export class AdminComponent implements OnInit {
   valueOfContact = '';
   userForm: FormGroup;
   userChoose: User;
-
-
+  adminToggle: boolean;
+  dtStart: Date;
+  dtEnd: Date;
+  selUserOrders: Order[] = [];
 
 
 
@@ -70,8 +74,8 @@ export class AdminComponent implements OnInit {
     this.fetchUsers();
     this.fetchOrders();
     this.fetchProducts()
-    this.userForm=this.formBuilder.group(
-      {user: [null]}
+    this.userForm = this.formBuilder.group(
+      {selUser: [null]}
     );
     this.contactForm = this.formBuilder.group(
       {contactType: [null]}
@@ -163,11 +167,12 @@ export class AdminComponent implements OnInit {
 
   activateContacts(i: number) {
     this.getContactTypes();
-    this.nameOfUserWhichContacts = this.allUsers[i].first_name +' '+ this.allUsers[i].last_name;
+    this.nameOfUserWhichContacts = this.allUsers[i].first_name + ' ' + this.allUsers[i].last_name;
     this.contactActive = true;
 
     let key = this.allUsers[i].id;
-    sessionStorage.setItem('idForNewContact', key.toString());
+    sessionStorage.setItem('numberOfUser', i.toString());
+    sessionStorage.setItem('idOfSelUser', key.toString());
 
     this.http.get<Contact[]>(this.apiUrl + this.contactUrl + this.findContactByUserIdURL, {params: new HttpParams().set('id', String(key))})
       .subscribe(contacts => {
@@ -196,12 +201,11 @@ export class AdminComponent implements OnInit {
   }
 
   createContact() {
-    console.log(this.userChoose);
-    let id =     sessionStorage.getItem('idForNewContact');;
+    // console.log(this.userChoose);
+    let id = sessionStorage.getItem('idOfSelUser');
     if (this.typeOfContact == '') {
       this.errorMessage = 'Выберите тип и нажмите кнопку "выбрать" или введите свой тип контакта';
     } else {
-
 
 
       const newContact: Contact = {
@@ -210,12 +214,51 @@ export class AdminComponent implements OnInit {
         userId: id
       };
 
-      this.http.post<Contact>(this.apiUrl + this.contactUrl + this.saveContactURL, newContact)
+      this.http.post<Contact>(this.apiUrl + this.contactUrl + this.saveContactURL, newContact).pipe(catchError(this.handleError))
         .subscribe(newContact => {
           this.typeOfContact = '';
           this.valueOfContact = '';
           console.log(newContact);
         });
+      // sessionStorage.removeItem('idOfSelUser');
     }
+  }
+
+  handleError(error) {
+    let errorMessage = '';
+    if (error.error instanceof ErrorEvent) {
+      // client-side error
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      // server-side error
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    }
+    window.alert(errorMessage);
+    return throwError(errorMessage);
+  }
+
+  chooseAdmin() {
+    let i = sessionStorage.getItem('numberOfUser');
+
+    let user: User = this.allUsers[i];
+    user.admin_toggle = this.adminToggle;
+    this.http.post<User>(this.apiUrl + this.userUrl + this.updateUserURL, user).pipe(catchError(this.handleError))
+      .subscribe(user => {
+      });
+
+  }
+
+  queryListOfProduct() {
+    let id = this.userChoose.id.toString();
+
+    console.log(id);
+    this.http.get<Order[]>(this.apiUrl + this.orderUrl + this.findOrdersByUserIdAndDate
+      , {params: new HttpParams().set('startDate', this.dtStart.toString()).set('endDate', this.dtEnd.toString()).set('userId', id)})
+      .subscribe(orders => {
+        // orders.sort((a, b) => <any>new Date(b.timestamp) - <any>new Date(a.timestamp));
+        this.selUserOrders = orders;
+      });
+
+
   }
 }
