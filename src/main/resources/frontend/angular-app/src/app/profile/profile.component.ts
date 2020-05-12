@@ -9,6 +9,8 @@ import {User} from "../models/user";
 import * as configuration from "../config.json";
 import {ContactType} from "../models/contactType";
 import {FormBuilder, FormGroup} from "@angular/forms";
+import {throwError} from "rxjs";
+import {catchError} from "rxjs/operators";
 
 @Component({
   selector: 'app-profile',
@@ -65,6 +67,7 @@ export class ProfileComponent implements OnInit {
     let key = sessionStorage.getItem('token');
     // this.http.get<Order[]>('http://localhost:8080/test/FindOrderByUserId', {params: new HttpParams().set('id', key)})
     this.http.get<Order[]>(this.apiUrl + this.orderUrl + this.findOrderByUserId_withUser, {params: new HttpParams().set('id', key)})
+      .pipe(catchError(this.handleError))
       .subscribe(orders => {
         orders.sort((a, b) => <any>new Date(b.timestamp) - <any>new Date(a.timestamp));
         this.orders = orders;
@@ -75,6 +78,7 @@ export class ProfileComponent implements OnInit {
     let key = sessionStorage.getItem('token');
     // this.http.get<Order[]>('http://localhost:8080/test/FindOrderByUserId', {params: new HttpParams().set('id', key)})
     this.http.get<Contact[]>(this.apiUrl + this.contactUrl + this.findContactByUserId, {params: new HttpParams().set('id', key)})
+      .pipe(catchError(this.handleError))
       .subscribe(contacts => {
         // orders.sort((a, b) => <any> new Date(b.timestamp) - <any> new Date(a.timestamp));
         this.contacts = contacts;
@@ -85,6 +89,7 @@ export class ProfileComponent implements OnInit {
     let deleteOrder = this.orders[i];
     // this.http.post<User>('http://localhost:8080/test/deleteOrder', deleteOrder)
     this.http.post<Order>(this.apiUrl + this.orderUrl + this.deleteOrderURL, deleteOrder)
+      .pipe(catchError(this.handleError))
       .subscribe(delOrder => {
         this.orders.splice(i, 1);
       });
@@ -93,6 +98,7 @@ export class ProfileComponent implements OnInit {
   getContactTypes() {
     let key = sessionStorage.getItem('token');
     this.http.get<ContactType[]>(this.apiUrl + this.contactUrl + this.findAllContactTypes)
+      .pipe(catchError(this.handleError))
       .subscribe(contacts => {
         this.contactTypes = contacts;
       });
@@ -103,6 +109,7 @@ export class ProfileComponent implements OnInit {
     let deleteContact = this.contacts[j];
     // this.http.post<User>('http://localhost:8080/test/deleteOrder', deleteOrder)
     this.http.post<Contact>(this.apiUrl + this.contactUrl + this.deleteContactUrl, deleteContact)
+      .pipe(catchError(this.handleError))
       .subscribe(delContact => {
         this.contacts.splice(j, 1);
       });
@@ -124,6 +131,7 @@ export class ProfileComponent implements OnInit {
     };
 
     this.http.post<Contact>(this.apiUrl + this.contactUrl + this.saveContactURL, newContact)
+      .pipe(catchError(this.handleError))
       .subscribe(newContact => {
         this.typeOfContact = '';
         this.valueOfContact = '';
@@ -138,4 +146,18 @@ export class ProfileComponent implements OnInit {
     this.typeOfContact = this.contactChoose.type;
   }
 
+  handleError(error) {
+    let errorMessage = '';
+    if (error.error instanceof ErrorEvent) {
+      // client-side error
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      // server-side error
+      let allString = error.error.message;
+      let message=allString.match(/messageTemplate=.*'/gm);
+      errorMessage = `Error Code: ${error.status}\nMessage: ${message}`;
+    }
+    window.alert(errorMessage);
+    return throwError(errorMessage);
+  }
 }

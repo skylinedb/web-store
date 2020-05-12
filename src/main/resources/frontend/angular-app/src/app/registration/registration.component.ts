@@ -3,6 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {Md5} from 'ts-md5/dist/md5';
 import * as configuration from "src/app/config.json";
 import {User} from "../models/user";
+import {throwError} from "rxjs";
+import {catchError} from "rxjs/operators";
 
 
 
@@ -39,17 +41,17 @@ export class RegistrationComponent implements OnInit {
       pass: newPassword
     };
 
-    if (this.firstname == '') {
-      this.testCredentials = 'Введите Имя!';
-    } else if (this.lastname == '') {
-      this.testCredentials = 'Введите Фамилию!';
-    } else if (this.email == '') {
-      this.testCredentials = 'Введите почту!';
-    } else if (this.pass == '') {
-      this.testCredentials = 'Введите пароль!';
-    } else {
+    // if (this.firstname == '') {
+    //   this.testCredentials = 'Введите Имя!';
+    // } else if (this.lastname == '') {
+    //   this.testCredentials = 'Введите Фамилию!';
+    // } else if (this.email == '') {
+    //   this.testCredentials = 'Введите почту!';
+    // } else if (this.pass == '') {
+    //   this.testCredentials = 'Введите пароль!';
+    // } else {
       // this.http.post<User>('http://localhost:8080/api/user/save', newUser)
-      this.http.post<User>(this.apiUrl + this.userUrl + this.saveUserURL, newUser)
+      this.http.post<User>(this.apiUrl + this.userUrl + this.saveUserURL, newUser).pipe(catchError(this.handleError))
         .subscribe(user => {
           console.log('User', newUser);
           this.firstname = '';
@@ -58,7 +60,22 @@ export class RegistrationComponent implements OnInit {
           this.pass = '';
           this.testCredentials = 'Успешно!'
         });
+    // }
+  }
+
+  handleError(error) {
+    let errorMessage = '';
+    if (error.error instanceof ErrorEvent) {
+      // client-side error
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      // server-side error
+      let allString = error.error.message;
+      let message=allString.match(/messageTemplate=.*'/gm);
+      errorMessage = `Error Code: ${error.status}\nMessage: ${message}`;
     }
+    window.alert(errorMessage);
+    return throwError(errorMessage);
   }
 
 }

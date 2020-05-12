@@ -12,6 +12,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
@@ -39,12 +40,16 @@ public class Order {
     private java.time.LocalDateTime timestamp;
 
     @Column(name = "SUMM")
+    @Positive
     private double summ;
 
     @Column(name = "SUMM_DISCOUNT")
+    @Positive
     private double summ_discount;
 
     @Column(name = "DISCOUNT_PERCENT")
+    @Positive
+    @Max(value = 99, message = "Процент не может быть больше 99")
     private int discount_percent;
 
     @ManyToOne(optional = false)

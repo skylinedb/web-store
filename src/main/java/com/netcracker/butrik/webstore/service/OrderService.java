@@ -10,14 +10,12 @@ import com.netcracker.butrik.webstore.model.User;
 import com.netcracker.butrik.webstore.repository.DiscountJpaRepository;
 import com.netcracker.butrik.webstore.repository.OrderJpaRepository;
 import com.netcracker.butrik.webstore.repository.UserJpaRepository;
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -146,16 +144,8 @@ public class OrderService {
         return order_summ;
     }
 
-//    @Query("SELECT o FROM Order o WHERE o.userId=:userid")
-//    public List<Order> getQuery(int userid) {}
-//    public List<Product> getProductsByDate(java.time.LocalDateTime startDate, java.time.LocalDateTime endDate) {
-//        int userid = 101;
-//        List<Product> products;
-//        return products;
-//    }
 
-    public List<OrderDto> getOrdersByDateAndUserId(String startDate,String endDate, int userId) {
-//        String now = "2016-11-09 10:30";
+    public List<OrderDto> getOrdersByDateAndUserId(String startDate, String endDate, int userId) {
         startDate = startDate + " 00:00";
         endDate = endDate + " 23:59";
 
@@ -163,13 +153,6 @@ public class OrderService {
 
         LocalDateTime startDateTime = LocalDateTime.parse(startDate, formatter);
         LocalDateTime endDateTime = LocalDateTime.parse(endDate, formatter);
-
-//        System.out.println("Before : " + now);
-//
-//        System.out.println("After : " + formatDateTime);
-//
-//        System.out.println("After : " + formatDateTime.format(formatter));
-
         log.info("Order: QUERY OPERATION");
         List<Order> orders = orderJpaRepository.getOrdersByDateAndUserId(startDateTime, endDateTime, userId);
         return orderMapper.toDtos(orders);

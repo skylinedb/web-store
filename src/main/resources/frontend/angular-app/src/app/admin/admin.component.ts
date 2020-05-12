@@ -108,7 +108,7 @@ export class AdminComponent implements OnInit {
 
   deleteProduct(i: number) {
     let deleteProduct = this.allProducts[i];
-    this.http.post<Product>(this.apiUrl + this.productUrl + this.deleteProductURL, deleteProduct)
+    this.http.post<Product>(this.apiUrl + this.productUrl + this.deleteProductURL, deleteProduct).pipe(catchError(this.handleError))
       .subscribe(delProduct => {
         this.allProducts.splice(i, 1);
       });
@@ -116,7 +116,7 @@ export class AdminComponent implements OnInit {
 
   deleteOrder(i: number) {
     let deleteOrder = this.allOrders[i];
-    this.http.post<Order>(this.apiUrl + this.orderUrl + this.deleteOrderURL, deleteOrder)
+    this.http.post<Order>(this.apiUrl + this.orderUrl + this.deleteOrderURL, deleteOrder).pipe(catchError(this.handleError))
       .subscribe(delOrder => {
         this.allOrders.splice(i, 1);
       });
@@ -124,7 +124,7 @@ export class AdminComponent implements OnInit {
 
   deleteUser(i: number) {
     let deleteUser = this.allUsers[i];
-    this.http.post<User>(this.apiUrl + this.userUrl + this.deleteUserURL, deleteUser)
+    this.http.post<User>(this.apiUrl + this.userUrl + this.deleteUserURL, deleteUser).pipe(catchError(this.handleError))
       .subscribe(delUser => {
         this.allUsers.splice(i, 1);
       });
@@ -134,7 +134,7 @@ export class AdminComponent implements OnInit {
     let resetPasswordUser = this.allUsers[i];
     let newPassword: any = Md5.hashStr(this.newResetPass);
     resetPasswordUser.pass = newPassword;
-    this.http.post<User>(this.apiUrl + this.userUrl + this.updateUserURL, resetPasswordUser)
+    this.http.post<User>(this.apiUrl + this.userUrl + this.updateUserURL, resetPasswordUser).pipe(catchError(this.handleError))
       .subscribe(delUser => {
         console.log(resetPasswordUser);
       });
@@ -152,7 +152,7 @@ export class AdminComponent implements OnInit {
       product_price: this.priceOfProduct,
     };
 
-    this.http.post<Product>(this.apiUrl + this.productUrl + this.saveProductURL, newProduct)
+    this.http.post<Product>(this.apiUrl + this.productUrl + this.saveProductURL, newProduct).pipe(catchError(this.handleError))
       .subscribe(product => {
         console.log('Product', newProduct);
         this.nameOfProduct = '';
@@ -190,7 +190,7 @@ export class AdminComponent implements OnInit {
 
   deleteContact(l: number) {
     let deleteContact = this.contacts[l];
-    this.http.post<Contact>(this.apiUrl + this.contactUrl + this.deleteContactUrl, deleteContact)
+    this.http.post<Contact>(this.apiUrl + this.contactUrl + this.deleteContactUrl, deleteContact).pipe(catchError(this.handleError))
       .subscribe(deleteContact => {
         this.contacts.splice(l, 1);
       });
@@ -215,12 +215,13 @@ export class AdminComponent implements OnInit {
       };
 
       this.http.post<Contact>(this.apiUrl + this.contactUrl + this.saveContactURL, newContact).pipe(catchError(this.handleError))
+        .pipe(catchError(this.handleError))
         .subscribe(newContact => {
           this.typeOfContact = '';
           this.valueOfContact = '';
+          this.contacts.push(newContact)
           console.log(newContact);
         });
-      // sessionStorage.removeItem('idOfSelUser');
     }
   }
 
@@ -231,7 +232,9 @@ export class AdminComponent implements OnInit {
       errorMessage = `Error: ${error.error.message}`;
     } else {
       // server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      let allString = error.error.message;
+      let message=allString.match(/messageTemplate=.*'/gm);
+      errorMessage = `Error Code: ${error.status}\nMessage: ${message}`;
     }
     window.alert(errorMessage);
     return throwError(errorMessage);
@@ -243,6 +246,7 @@ export class AdminComponent implements OnInit {
     let user: User = this.allUsers[i];
     user.admin_toggle = this.adminToggle;
     this.http.post<User>(this.apiUrl + this.userUrl + this.updateUserURL, user).pipe(catchError(this.handleError))
+      .pipe(catchError(this.handleError))
       .subscribe(user => {
       });
 

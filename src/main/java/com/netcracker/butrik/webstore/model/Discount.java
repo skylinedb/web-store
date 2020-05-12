@@ -8,10 +8,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "DISCOUNT")
-public class Discount implements Comparable<Discount>{
+public class Discount implements Comparable<Discount> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,18 +20,18 @@ public class Discount implements Comparable<Discount>{
     private int id;
 
     @Column(name = "BADGE")
-//    @Size(min = 2, message = "Название должно быть больше 2 символов")
-//    @Size(max = 10, message = "Название не может быть больше 10 символов")
+    @Size(min = 2, message = "Название должно быть больше 2 символов")
+    @Size(max = 10, message = "Название не может быть больше 10 символов")
     private String badge;
 
     @Column(name = "PERCENT")
-//    @Min(value = 0, message = "Процент не может быть меньше 0")
-//    @Max(value = 99, message = "Процент не может быть больше 99")
+    @Min(value = 0, message = "Процент не может быть меньше 0")
+    @Max(value = 99, message = "Процент не может быть больше 99")
     private int percent;
 
     @Column(name = "SUMM")
-//    @Min(value = 0, message = "Процент не может быть меньше 0")
-//    @Max(value = 99, message = "Процент не может быть больше 99")
+    @Min(value = 0, message = "Сумма не может быть меньше 0")
+    @Max(value = 99999999, message = "Сумма не может быть больше 99999999")
     private int summ;
 
     public int getId() {

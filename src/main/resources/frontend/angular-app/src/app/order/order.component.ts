@@ -2,11 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {Product} from '../models/product';
 import {Order} from '../models/order';
 import {User} from '../models/user';
-import {delay} from 'rxjs/operators';
+import {catchError, delay} from 'rxjs/operators';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Router} from '@angular/router';
 // @ts-ignore
 import * as configuration from "src/app/config.json";
+import {throwError} from "rxjs";
 
 
 @Component({
@@ -44,7 +45,7 @@ export class OrderComponent implements OnInit {
         // this.loading = true;
         // this.http.get<Product[]>('http://localhost:8080/test/giveMeAllProducts')
         this.http.get<Product[]>(this.apiUrl+this.productUrl+this.findAllProductsURL)
-            .pipe(delay(1500))
+            .pipe(catchError(this.handleError))
             .subscribe(todos => {
                 this.allProducts = todos;
                 // this.loading = false;
@@ -55,7 +56,7 @@ export class OrderComponent implements OnInit {
         let key = sessionStorage.getItem('token');
         // this.http.get<User>('http://localhost:8080/test/getUserById', {params: new HttpParams().set('id', key)})
         this.http.get<User>(this.apiUrl+this.userUrl+this.findUserByIdURL, {params: new HttpParams().set('id', key)})
-            .pipe(delay(1500))
+            .pipe(catchError(this.handleError))
             .subscribe(user => {
                 this.user = user;
                 this.email = user.email;
@@ -84,6 +85,7 @@ export class OrderComponent implements OnInit {
 
         // this.http.post<User>('http://localhost:8080/test/saveOrder', newOrder)
         this.http.post<Order>(this.apiUrl+this.orderUrl+this.saveOrderURL, newOrder)
+          .pipe(catchError(this.handleError))
             .subscribe(user => {
                 console.log('Order', newOrder);
                 // this.users.push(user);
@@ -96,4 +98,19 @@ export class OrderComponent implements OnInit {
     deleteFromOrder(i: number) {
         this.orderProducts.splice(i, 1);
     }
+
+  handleError(error) {
+    let errorMessage = '';
+    if (error.error instanceof ErrorEvent) {
+      // client-side error
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      // server-side error
+      let allString = error.error.message;
+      let message=allString.match(/messageTemplate=.*'/gm);
+      errorMessage = `Error Code: ${error.status}\nMessage: ${message}`;
+    }
+    window.alert(errorMessage);
+    return throwError(errorMessage);
+  }
 }

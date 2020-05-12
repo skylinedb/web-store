@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ContactService {
 
+    private static Logger log = LoggerFactory.getLogger(ContactService.class);
     @Autowired
     ContactJpaRepository contactJpaRepository;
     @Autowired
@@ -31,9 +32,6 @@ public class ContactService {
     ContactTypeJpaRepository contactTypeJpaRepository;
     @Autowired
     ContactTypeMapperImpl contactTypeMapper;
-
-
-    private static Logger log = LoggerFactory.getLogger(ContactService.class);
 
     public void save(final ContactDto contactDto) {
         ContactType contactType = new ContactType();

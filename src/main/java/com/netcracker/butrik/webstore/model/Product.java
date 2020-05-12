@@ -11,9 +11,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 
 @Entity
@@ -31,7 +29,7 @@ public class Product {
 
     @Column(name = "PRODUCT_PRICE")
     @Positive(message = "Цена не может быть отрицательной")
-    @Max(value = 999999999, message = "Цена слишком высокая")
+    @Max(value = 99999999, message = "Цена не может быть больше")
     private double product_price;
 
     @ManyToMany

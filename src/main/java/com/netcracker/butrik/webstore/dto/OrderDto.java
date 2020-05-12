@@ -23,15 +23,11 @@ public class OrderDto {
 
     private List<ProductDto> products;
 
-    public OrderDto(int id, String address, int userId, LocalDateTime timestamp, double summ, double summ_discount, int discount_percent, UserDto user, List<ProductDto> products) {
+    public OrderDto(int id, String address, int userId, LocalDateTime timestamp, List<ProductDto> products) {
         this.id = id;
         this.address = address;
         this.userId = userId;
         this.timestamp = timestamp;
-        this.summ = summ;
-        this.summ_discount = summ_discount;
-        this.discount_percent = discount_percent;
-        this.user = user;
         this.products = products;
     }
 

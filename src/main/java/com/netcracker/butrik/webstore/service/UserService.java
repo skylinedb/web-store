@@ -3,7 +3,6 @@ package com.netcracker.butrik.webstore.service;
 import com.netcracker.butrik.webstore.dto.ContactDto;
 import com.netcracker.butrik.webstore.dto.UserDto;
 import com.netcracker.butrik.webstore.dto.mapper.impl.UserMapperImpl;
-import com.netcracker.butrik.webstore.model.Contact;
 import com.netcracker.butrik.webstore.model.User;
 import com.netcracker.butrik.webstore.repository.DiscountJpaRepository;
 import com.netcracker.butrik.webstore.repository.UserJpaRepository;
