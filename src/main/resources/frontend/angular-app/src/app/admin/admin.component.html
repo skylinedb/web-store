@@ -70,6 +70,35 @@
 </div>
 <button class="btn btn-danger" (click)="fetchUsers()">Обновить</button>
 <br>
+<div class="card">
+  <h2>Создание-удаление скидок</h2>
+  <div class="card" *ngFor="let discount of allDiscounts, let d=index">
+            <span>{{d + 1}}: {{discount.badge}} {{discount.percent}}% {{discount.summ}}.руб
+                 <button class="btn btn-danger" (click)="deleteDiscount(d)">Удалить</button>
+            </span>
+  </div>
+  <button class="btn btn-danger" (click)="fetchDiscounts()">Обновить</button>
+  <br>
+  <button class="btn btn-danger" (click)="createNewDiscount()">Создать новую скидку</button>
+  <div class="form-group" *ngIf="flagOfNewDiscount">
+    <br>
+    <label for="NewBadgeDiscount">Имя скидки</label>
+    <input type="text" class="form-control" id="NewBadgeDiscount" placeholder="Name"
+           [(ngModel)]="nameOfBadgeDiscount" [ngModelOptions]="{standalone: true}">
+    <label for="NewPercentDiscount">Процент скидки</label>
+    <input type="text" class="form-control" id="NewPercentDiscount" placeholder="Percent"
+           [(ngModel)]="percentOfDiscount" [ngModelOptions]="{standalone: true}">
+    <label for="NewSummDiscount">Сумма скидки</label>
+    <input type="text" class="form-control" id="NewSummDiscount" placeholder="Summ"
+           [(ngModel)]="summOfDiscount" [ngModelOptions]="{standalone: true}">
+    <button type="button" class="btn btn-danger" (click)="saveDiscount()">Сохранить новую скидку</button>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
+</div>
+<br>
 <h2>Просмотр-удаление заказов</h2>
 <div class="card" *ngFor="let ordersinline of allOrders, let i=index">
             <span>Заказ номер {{i + 1}}: Пользователь {{ordersinline.user.last_name}} {{ordersinline.user.first_name}}

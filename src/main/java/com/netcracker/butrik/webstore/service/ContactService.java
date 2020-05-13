@@ -21,17 +21,17 @@ public class ContactService {
 
     private static Logger log = LoggerFactory.getLogger(ContactService.class);
     @Autowired
-    ContactJpaRepository contactJpaRepository;
+    private ContactJpaRepository contactJpaRepository;
     @Autowired
-    ContactMapperImpl contactMapper;
+    private ContactMapperImpl contactMapper;
     @Autowired
-    UserService userService;
+    private UserService userService;
     @Autowired
-    UserMapperImpl userMapper;
+    private UserMapperImpl userMapper;
     @Autowired
-    ContactTypeJpaRepository contactTypeJpaRepository;
+    private ContactTypeJpaRepository contactTypeJpaRepository;
     @Autowired
-    ContactTypeMapperImpl contactTypeMapper;
+    private ContactTypeMapperImpl contactTypeMapper;
 
     public void save(final ContactDto contactDto) {
         ContactType contactType = new ContactType();

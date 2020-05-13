@@ -39,15 +39,13 @@ public class ProductController {
     }
 
     @PostMapping(value = "/save")
-    public ProductDto loadProduct(@RequestBody @Valid ProductDto productDto) {
+    public void loadProduct(@RequestBody @Valid ProductDto productDto) {
         productService.save(productDto);
-        return productService.findById(productDto.getId());
     }
 
     @PutMapping(value = "/update")
-    public ProductDto updateProduct(@RequestBody @Valid ProductDto productDto) {
+    public void updateProduct(@RequestBody @Valid ProductDto productDto) {
         productService.save(productDto);
-        return productService.findById(productDto.getId());
     }
 
     @PostMapping(value = "/delete")

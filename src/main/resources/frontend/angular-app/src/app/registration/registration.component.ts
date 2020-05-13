@@ -72,7 +72,7 @@ export class RegistrationComponent implements OnInit {
       // server-side error
       let allString = error.error.message;
       let message=allString.match(/messageTemplate=.*'/gm);
-      errorMessage = `Error Code: ${error.status}\nMessage: ${message}`;
+      errorMessage = `Message: ${message}`;
     }
     window.alert(errorMessage);
     return throwError(errorMessage);

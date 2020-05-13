@@ -4,6 +4,7 @@
   "apiNameUser": "/user",
   "apiNameContact": "/user/contact",
   "apiNameProduct": "/product",
+  "apiNameDiscount": "/discount",
   "Order": {
     "findAll": "/findAll",
     "findAll_withUser": "/findAll/user",
@@ -43,6 +44,12 @@
     "loadContact": "/save",
     "updateContact": "/update",
     "deleteContact": "/delete"
-  }
-
+  },
+  "Discount": {
+  "findAll": "/findAll",
+  "findById": "/findById",
+  "loadDiscount": "/save",
+  "updateDiscount": "/update",
+  "deleteDiscount": "/delete"
+}
 }

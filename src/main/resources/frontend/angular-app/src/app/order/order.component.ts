@@ -42,35 +42,26 @@ export class OrderComponent implements OnInit {
     }
 
     fetchProducts() {
-        // this.loading = true;
-        // this.http.get<Product[]>('http://localhost:8080/test/giveMeAllProducts')
         this.http.get<Product[]>(this.apiUrl+this.productUrl+this.findAllProductsURL)
             .pipe(catchError(this.handleError))
             .subscribe(todos => {
                 this.allProducts = todos;
-                // this.loading = false;
             });
     }
 
     fetchUser() {
         let key = sessionStorage.getItem('token');
-        // this.http.get<User>('http://localhost:8080/test/getUserById', {params: new HttpParams().set('id', key)})
         this.http.get<User>(this.apiUrl+this.userUrl+this.findUserByIdURL, {params: new HttpParams().set('id', key)})
             .pipe(catchError(this.handleError))
             .subscribe(user => {
                 this.user = user;
                 this.email = user.email;
-                console.log('Это User', this.user);
             });
     }
 
 
     addToOrder(i) {
-        console.log(this.allProducts[i].id);
-        console.log(this.allProducts[i]);
         this.orderProducts.push(this.allProducts[i]);
-        // console.log('Это уже в списке на добавление',this.orderProducts[0]);
-        // console.log('Это уже в списке на добавление',this.orderProducts[1]);
     }
 
     createOrder() {
@@ -83,7 +74,6 @@ export class OrderComponent implements OnInit {
             timestamp: current
         };
 
-        // this.http.post<User>('http://localhost:8080/test/saveOrder', newOrder)
         this.http.post<Order>(this.apiUrl+this.orderUrl+this.saveOrderURL, newOrder)
           .pipe(catchError(this.handleError))
             .subscribe(user => {
@@ -108,7 +98,7 @@ export class OrderComponent implements OnInit {
       // server-side error
       let allString = error.error.message;
       let message=allString.match(/messageTemplate=.*'/gm);
-      errorMessage = `Error Code: ${error.status}\nMessage: ${message}`;
+      errorMessage = `Message: ${message}`;
     }
     window.alert(errorMessage);
     return throwError(errorMessage);

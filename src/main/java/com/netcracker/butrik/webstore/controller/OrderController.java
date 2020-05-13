@@ -58,15 +58,13 @@ public class OrderController {
     }
 
     @PostMapping(value = "/save")
-    public OrderDto loadOrder(@RequestBody @Valid OrderDto orderDto) {
+    public void loadOrder(@RequestBody @Valid OrderDto orderDto) {
         orderService.save(orderDto);
-        return orderService.findById(orderDto.getId());
     }
 
     @PutMapping(value = "/update")
-    public OrderDto updateOrder(@RequestBody @Valid OrderDto orderDto) {
+    public void updateOrder(@RequestBody @Valid OrderDto orderDto) {
         orderService.update(orderDto);
-        return orderService.findById(orderDto.getId());
     }
 
     @PostMapping(value = "/delete")

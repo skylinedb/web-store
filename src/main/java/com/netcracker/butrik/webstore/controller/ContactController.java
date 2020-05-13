@@ -45,15 +45,13 @@ public class ContactController {
     }
 
     @PostMapping(value = "/save")
-    public ContactDto loadContact(@RequestBody @Valid ContactDto contactDto) {
+    public void loadContact(@RequestBody @Valid ContactDto contactDto) {
         contactService.save(contactDto);
-        return contactService.findById(contactDto.getId());
     }
 
     @PutMapping(value = "/update")
-    public ContactDto updateContact(@RequestBody @Valid ContactDto contactDto) {
+    public void updateContact(@RequestBody @Valid ContactDto contactDto) {
         contactService.update(contactDto);
-        return contactService.findById(contactDto.getId());
     }
 
     @PostMapping(value = "/delete")

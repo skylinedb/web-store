@@ -1,6 +1,7 @@
 package com.netcracker.butrik.webstore.repository;
 
 import com.netcracker.butrik.webstore.model.Discount;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 

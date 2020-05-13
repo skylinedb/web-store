@@ -53,15 +53,13 @@ public class UserController {
     }
 
     @PostMapping(value = "/save")
-    public UserDto loadUser(@RequestBody @Valid UserDto userDto) {
+    public void loadUser(@RequestBody @Valid UserDto userDto) {
         userService.save(userDto);
-        return userService.findById(userDto.getId());
     }
 
     @PostMapping(value = "/update")
-    public UserDto updateUser(@RequestBody @Valid UserDto userDto) {
+    public void updateUser(@RequestBody @Valid UserDto userDto) {
         userService.update(userDto);
-        return userService.findById(userDto.getId());
     }
 
     @PostMapping(value = "/delete")

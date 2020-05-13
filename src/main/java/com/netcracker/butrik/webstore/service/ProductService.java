@@ -17,9 +17,9 @@ public class ProductService {
 
     private static Logger log = LoggerFactory.getLogger(ProductService.class);
     @Autowired
-    ProductJpaRepository productJpaRepository;
+    private ProductJpaRepository productJpaRepository;
     @Autowired
-    ProductMapperImpl productMapper;
+    private ProductMapperImpl productMapper;
 
     public void save(final ProductDto productDto) {
         Product product = productMapper.fromDto(productDto);

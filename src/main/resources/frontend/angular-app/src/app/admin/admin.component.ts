@@ -24,6 +24,7 @@ export class AdminComponent implements OnInit {
   productUrl = configuration.apiNameProduct
   userUrl = configuration.apiNameUser
   contactUrl = configuration.apiNameContact
+  discountUrl = configuration.apiNameDiscount
   findAllUsersURL = configuration.User.findAll
   findAllProductsURL = configuration.Product.findAll
   findAllOrdersWithUserURL = configuration.Order.findAll_withUser
@@ -37,6 +38,10 @@ export class AdminComponent implements OnInit {
   findAllContactTypes = configuration.Contact.findAllTypes;
   saveContactURL = configuration.Contact.loadContact;
   findOrdersByUserIdAndDate = configuration.Order.findByUserIdAndDate;
+  findAllDiscountUrl = configuration.Discount.findAll
+  deleteDiscountUrl = configuration.Discount.deleteDiscount
+  loadDiscountUrl = configuration.Discount.loadDiscount
+  updateDiscountUrl = configuration.Discount.updateDiscount
 
   allOrders: Order[] = [];
   allUsers: User[] = [];
@@ -62,8 +67,11 @@ export class AdminComponent implements OnInit {
   dtStart: Date;
   dtEnd: Date;
   selUserOrders: Order[] = [];
-
-
+  allDiscounts: Discount[] = [];
+  nameOfBadgeDiscount = '';
+  percentOfDiscount: number;
+  summOfDiscount: number;
+  flagOfNewDiscount: boolean = false;
 
 
   constructor(private http: HttpClient, private formBuilder: FormBuilder) {
@@ -74,6 +82,7 @@ export class AdminComponent implements OnInit {
     this.fetchUsers();
     this.fetchOrders();
     this.fetchProducts()
+    this.fetchDiscounts();
     this.userForm = this.formBuilder.group(
       {selUser: [null]}
     );
@@ -233,8 +242,8 @@ export class AdminComponent implements OnInit {
     } else {
       // server-side error
       let allString = error.error.message;
-      let message=allString.match(/messageTemplate=.*'/gm);
-      errorMessage = `Error Code: ${error.status}\nMessage: ${message}`;
+      let message = allString.match(/messageTemplate=.*'/gm);
+      errorMessage = `Message: ${message}`;
     }
     window.alert(errorMessage);
     return throwError(errorMessage);
@@ -264,5 +273,39 @@ export class AdminComponent implements OnInit {
       });
 
 
+  }
+
+  fetchDiscounts() {
+    this.http.get<Discount[]>(this.apiUrl + this.discountUrl + this.findAllDiscountUrl)
+      .subscribe(discounts => {
+        this.allDiscounts = discounts;
+      });
+  }
+
+  deleteDiscount(d: number) {
+    let deleteDiscount = this.allDiscounts[d];
+    this.http.post<Discount>(this.apiUrl + this.discountUrl + this.deleteDiscountUrl, deleteDiscount).pipe(catchError(this.handleError))
+      .subscribe(delUser => {
+        this.allDiscounts.splice(d, 1);
+      });
+  }
+
+  saveDiscount() {
+    const newDiscount: Discount = {
+      badge: this.nameOfBadgeDiscount,
+      percent: this.percentOfDiscount,
+      summ: this.summOfDiscount
+    };
+
+    this.http.post<Discount>(this.apiUrl + this.discountUrl + this.loadDiscountUrl, newDiscount).pipe(catchError(this.handleError))
+      .subscribe(product => {
+        console.log('Product', newDiscount);
+        this.nameOfBadgeDiscount='';
+        this.allDiscounts.push(newDiscount);
+      });
+  }
+
+  createNewDiscount() {
+    this.flagOfNewDiscount = true;
   }
 }
