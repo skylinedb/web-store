@@ -5,11 +5,36 @@
 
     <div class="form-group">
         <label for="RegistrationFormControlInputEmail">Email</label>
-        <input type="email" class="form-control" id="RegistrationFormControlInputEmail" placeholder="example@example.com" [(ngModel)]="email" [ngModelOptions]="{standalone: true}">
+        <input type="email" class="form-control" id="RegistrationFormControlInputEmail" placeholder="example@example.com"
+               required minlength="6" pattern=".+@[a-z]+.(com|ru|org|list)"
+               [(ngModel)]="email" [ngModelOptions]="{standalone: true}" #userLogin=ngModel>
+      <div *ngIf="userLogin.invalid && (userLogin.dirty || userLogin.touched)"
+           class="alert alert-danger">
+        <div *ngIf="userLogin.errors.required">
+          Необходимо ввести адрес электронной почты.
+        </div>
+        <div *ngIf="userLogin.errors.minlength">
+          Email должен быть больше 6 символов.
+        </div>
+        <div *ngIf="userLogin.errors.pattern">
+          Email должен соотвествовать **@**.com|ru|list|org
+        </div>
+      </div>
     </div>
     <div class="form-group">
         <label for="RegistrationFormControlInputPass">Password</label>
-        <input type="password" class="form-control" id="RegistrationFormControlInputPass" placeholder="Password" (keyup.enter)="loginUser()" [(ngModel)]="pass" [ngModelOptions]="{standalone: true} " >
+        <input type="password" class="form-control" id="RegistrationFormControlInputPass" placeholder="Password" (keyup.enter)="loginUser()"
+               required minlength="3"
+               [(ngModel)]="pass" [ngModelOptions]="{standalone: true} " #userPass=ngModel>
+      <div *ngIf="userPass.invalid && (userPass.dirty || userPass.touched)"
+           class="alert alert-danger">
+        <div *ngIf="userPass.errors.required">
+          Необходимо ввести пароль.
+        </div>
+        <div *ngIf="userPass.errors.minlength">
+          Пароль должен быть больше 3 символов.
+        </div>
+      </div>
     </div>
     <button type="button" class="btn" (click)="loginUser()">Авторизоваться</button>
     <br>

@@ -29,7 +29,7 @@ public class Product {
 
     @Column(name = "PRODUCT_PRICE")
     @Positive(message = "Цена не может быть отрицательной")
-    @Max(value = 99999999, message = "Цена не может быть больше")
+    @Max(value = 99999999, message = "Цена не может быть больше 99999999")
     private double product_price;
 
     @ManyToMany

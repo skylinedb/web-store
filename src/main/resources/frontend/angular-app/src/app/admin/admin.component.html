@@ -52,15 +52,34 @@
             {{ tp.type}}
           </option>
         </select>
-        <input type="text" class="form-control" id="CreateFormControlInputContactType"
-               placeholder="Нажмите выбрать или введите свой тип контакта"
-               [(ngModel)]="typeOfContact" [ngModelOptions]="{standalone: true}">
+        <input type="text" class="form-control" id="CreateFormControlInputContactType" placeholder="Нажмите выбрать или введите свой тип контакта"
+               required minlength="2"
+               [(ngModel)]="typeOfContact" [ngModelOptions]="{standalone: true}" #contactTypeInput=ngModel>
+        <div *ngIf="contactTypeInput.invalid && (contactTypeInput.dirty || contactTypeInput.touched)"
+             class="alert alert-danger">
+          <div *ngIf="contactTypeInput.errors.required">
+            Необходимо ввести тип контакта.
+          </div>
+          <div *ngIf="contactTypeInput.errors.minlength">
+            Тип контакта дожен быть длиннее 2 символов.
+          </div>
+        </div>
         <label>{{errorMessage}}</label>
         <button type="button" class="btn btn-danger" (click)="setContactType()">Выбрать</button>
         <br>
         <br>
         <input type="text" class="form-control" id="CreateFormControlInputContactValue" placeholder="Введите значение"
-               [(ngModel)]="valueOfContact" [ngModelOptions]="{standalone: true}">
+               required minlength="2"
+               [(ngModel)]="valueOfContact" [ngModelOptions]="{standalone: true}" #contactValueInput= ngModel>
+        <div *ngIf="contactValueInput.invalid && (contactValueInput.dirty || contactValueInput.touched)"
+             class="alert alert-danger">
+          <div *ngIf="contactValueInput.errors.required">
+            Необходимо ввести значение контакта.
+          </div>
+          <div *ngIf="contactValueInput.errors.minlength">
+            Значение контакта дожен быть длиннее 2 символов.
+          </div>
+        </div>
         <button type="button" class="btn btn-danger" (click)="createContact()">Отправить</button>
       </form>
     </div>
@@ -84,13 +103,52 @@
     <br>
     <label for="NewBadgeDiscount">Имя скидки</label>
     <input type="text" class="form-control" id="NewBadgeDiscount" placeholder="Name"
-           [(ngModel)]="nameOfBadgeDiscount" [ngModelOptions]="{standalone: true}">
+           required minlength="2" maxlength="10"
+           [(ngModel)]="nameOfBadgeDiscount" [ngModelOptions]="{standalone: true}" #nameOfDisc=ngModel>
+    <div *ngIf="nameOfDisc.invalid && (nameOfDisc.dirty || nameOfDisc.touched)"
+         class="alert alert-danger">
+      <div *ngIf="nameOfDisc.errors.required">
+        Необходимо ввести имя скидки.
+      </div>
+      <div *ngIf="nameOfDisc.errors.minlength">
+        Имя скидки должно быть длиннее 2 символов.
+      </div>
+      <div *ngIf="nameOfDisc.errors.maxlength">
+        Имя скидки не дожно быть длиннее 10 символов.
+      </div>
+    </div>
     <label for="NewPercentDiscount">Процент скидки</label>
-    <input type="text" class="form-control" id="NewPercentDiscount" placeholder="Percent"
-           [(ngModel)]="percentOfDiscount" [ngModelOptions]="{standalone: true}">
+    <input type="number" class="form-control" id="NewPercentDiscount" placeholder="Percent"
+           required min="0" max="99" step="1"
+           [(ngModel)]="percentOfDiscount" [ngModelOptions]="{standalone: true}" #percentOfDisc=ngModel>
+    <div *ngIf="percentOfDisc.invalid && (percentOfDisc.dirty || percentOfDisc.touched)"
+         class="alert alert-danger">
+      <div *ngIf="percentOfDisc.errors.required">
+        Необходимо ввести процент.
+      </div>
+      <div *ngIf="percentOfDisc.errors.min">
+        Процент не может быть меньше 0.
+      </div>
+      <div *ngIf="percentOfDisc.errors.max">
+        Процент не может быть больше 99.
+      </div>
+    </div>
     <label for="NewSummDiscount">Сумма скидки</label>
-    <input type="text" class="form-control" id="NewSummDiscount" placeholder="Summ"
-           [(ngModel)]="summOfDiscount" [ngModelOptions]="{standalone: true}">
+    <input type="number" class="form-control" id="NewSummDiscount" placeholder="Summ"
+           required min="1" max="99999999" step="1"
+           [(ngModel)]="summOfDiscount" [ngModelOptions]="{standalone: true}" #summOfDisc=ngModel>
+    <div *ngIf="summOfDisc.invalid && (summOfDisc.dirty || summOfDisc.touched)"
+         class="alert alert-danger">
+      <div *ngIf="summOfDisc.errors.required">
+        Необходимо ввести сумму.
+      </div>
+      <div *ngIf="summOfDisc.errors.min">
+        Сумма не может быть меньше 0.
+      </div>
+      <div *ngIf="summOfDisc.errors.max">
+        Сумма не может быть больше 99999999.
+      </div>
+    </div>
     <button type="button" class="btn btn-danger" (click)="saveDiscount()">Сохранить новую скидку</button>
     <br>
     <br>
@@ -127,9 +185,34 @@
 </div>
 <div class="form-group" *ngIf="createProductFlag">
   <input type="text" class="form-control" id="CreateFormControlInputProductName" placeholder="Name of Product"
-         [(ngModel)]="nameOfProduct" [ngModelOptions]="{standalone: true}">
-  <input type="text" class="form-control" id="CreateFormControlInputProductPrice" placeholder="Price"
-         [(ngModel)]="priceOfProduct" [ngModelOptions]="{standalone: true}">
+         required minlength="2"
+         [(ngModel)]="nameOfProduct" [ngModelOptions]="{standalone: true}" #nameProduct=ngModel>
+  <div *ngIf="nameProduct.invalid && (nameProduct.dirty || nameProduct.touched)"
+       class="alert alert-danger">
+    <div *ngIf="nameProduct.errors.required">
+      Необходимо ввести название продукта.
+    </div>
+    <div *ngIf="nameProduct.errors.minlength">
+      Название продукта должно быть длиннее 2 символов.
+    </div>
+  </div>
+
+  <input type="number" class="form-control" id="CreateFormControlInputProductPrice" placeholder="Price"
+         required min="1" max="99999999"
+         [(ngModel)]="priceOfProduct" [ngModelOptions]="{standalone: true}" #productPrice=ngModel>
+  <div *ngIf="productPrice.invalid && (productPrice.dirty || productPrice.touched)"
+       class="alert alert-danger">
+    <div *ngIf="productPrice.errors.required">
+      Необходимо ввести цену продукта.
+    </div>
+    <div *ngIf="productPrice.errors.min">
+      Цена продукта не должна быть отрицательной.
+    </div>
+    <div *ngIf="productPrice.errors.max">
+      Цена не может быть больше 99999999.
+    </div>
+  </div>
+
   <button type="button" class="btn btn-danger" (click)="createProduct()">Записать</button>
   <br>
   <br>
