@@ -20,11 +20,13 @@ public class DiscountService {
 
     public List<DiscountDto> findAll() {
         List<Discount> discountList = discountJpaRepository.findAll();
+        log.info("Discount: ID: FindAll OPERATION");
         return discountMapper.toDtos(discountList);
     }
 
     public DiscountDto findById(int id) {
         Discount discount = discountJpaRepository.findById(id);
+        log.info("Discount: ID: FindById OPERATION");
         return discountMapper.toDto(discount);
     }
 

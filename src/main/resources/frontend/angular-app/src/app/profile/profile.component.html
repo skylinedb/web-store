@@ -3,8 +3,8 @@
   <button type="button" (click)="contactToggle = !contactToggle">Показать</button>
   <p *ngIf="contactToggle">
       <span>
-        <div class="card" *ngFor="let contacts of contacts, let j=index">
-          {{j + 1}}. {{contacts.type_label}} : {{contacts.value}}
+        <div class="card" *ngFor="let contact of contacts, let j=index">
+          {{j + 1}}. {{contact.type_label}} : {{contact.value}}
           <button class="btn btn-danger" (click)="deleteContact(j)">Удалить</button></div>
         <button class="btn" (click)="createContactFlag = !createContactFlag">Добавить контакт</button>
       </span>

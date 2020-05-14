@@ -225,11 +225,10 @@ export class AdminComponent implements OnInit {
 
       this.http.post<Contact>(this.apiUrl + this.contactUrl + this.saveContactURL, newContact).pipe(catchError(this.handleError))
         .pipe(catchError(this.handleError))
-        .subscribe(newContact => {
+        .subscribe(contact => {
           this.typeOfContact = '';
           this.valueOfContact = '';
           this.contacts.push(newContact)
-          console.log(newContact);
         });
     }
   }

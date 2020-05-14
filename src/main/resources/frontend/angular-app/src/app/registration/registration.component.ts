@@ -41,16 +41,6 @@ export class RegistrationComponent implements OnInit {
       pass: newPassword
     };
 
-    // if (this.firstname == '') {
-    //   this.testCredentials = 'Введите Имя!';
-    // } else if (this.lastname == '') {
-    //   this.testCredentials = 'Введите Фамилию!';
-    // } else if (this.email == '') {
-    //   this.testCredentials = 'Введите почту!';
-    // } else if (this.pass == '') {
-    //   this.testCredentials = 'Введите пароль!';
-    // } else {
-      // this.http.post<User>('http://localhost:8080/api/user/save', newUser)
       this.http.post<User>(this.apiUrl + this.userUrl + this.saveUserURL, newUser).pipe(catchError(this.handleError))
         .subscribe(user => {
           console.log('User', newUser);

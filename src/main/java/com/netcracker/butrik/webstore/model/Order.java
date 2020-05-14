@@ -13,6 +13,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
@@ -48,7 +49,7 @@ public class Order {
     private double summ_discount;
 
     @Column(name = "DISCOUNT_PERCENT")
-    @Positive
+    @Min(value = 0, message = "Процент не может быть меньше 0")
     @Max(value = 99, message = "Процент не может быть больше 99")
     private int discount_percent;
 
